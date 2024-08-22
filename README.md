@@ -1,5 +1,8 @@
 # mtg-html-rules
 
+[![Lint](https://github.com/SethCurry/mtg-html-rules/actions/workflows/lint.yml/badge.svg)](https://github.com/SethCurry/mtg-html-rules/actions/workflows/lint.yml)
+[![Test](https://github.com/SethCurry/mtg-html-rules/actions/workflows/go-test.yml/badge.svg)](https://github.com/SethCurry/mtg-html-rules/actions/workflows/go-test.yml)
+
 `mtg-html-rules` is a tool for converting the comprehensive rules for Magic: The Gathering
 into a single HTML file with anchors for linking to an individual rule.
 
