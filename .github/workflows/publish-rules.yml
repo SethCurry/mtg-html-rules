@@ -1,0 +1,23 @@
+name: Publish HTML Page
+on:
+  push:
+
+permissions:
+  contents: write
+  packages: write
+
+jobs:
+  releases-matrix:
+    name: Release Go Binary
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v4
+      - name: Build mtg-html-rules
+        run: go build .
+      - name: Make _site directory
+        run: mkdir _site
+      - name: Generate HTML file
+        run: ./mtg-html-rules --output _site/index.html
+      - uses: actions/upload-pages-artifact@v3
+      - uses: actions/deploy-pages@v4
