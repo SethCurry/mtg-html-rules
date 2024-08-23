@@ -3,6 +3,7 @@ package main
 import (
 	"flag"
 	"fmt"
+	"net/http"
 	"os"
 
 	"github.com/SethCurry/mtg-html-rules/internal/rulehtml"
@@ -10,28 +11,46 @@ import (
 )
 
 func usage() {
-	fmt.Println("mtg-html-rules <input file> [--output <output file>]")
+	fmt.Println("mtg-html-rules [--rules <rules file>] [--output <output file>]")
 }
 
 func main() {
-	// position argument for input file
-	// optional flag for output file
-
 	outputFilePath := flag.String("output", "./mtgcr.html", "The path to write the HTML rules file to.")
+	rulesFilePath := flag.String("rules", "", "The path to the rules file to parse.")
 
 	flag.Parse()
 
-	if len(os.Args) < 1 || len(os.Args) > 2 {
-		usage()
-		os.Exit(1)
-	}
+	var parsedRules *ruleparser.Rules
 
-	inputFilePath := os.Args[0]
+	if *rulesFilePath == "" {
+		rulesURL, err := ruleparser.GetLatestRulesTxtURL()
+		if err != nil {
+			fmt.Printf("no rules file provided with --rules flag, and failed to find the URL for the latest rules:\n%s\n", err.Error())
+			os.Exit(1)
+		}
 
-	parsedRules, err := ruleparser.ParseFile(inputFilePath)
-	if err != nil {
-		fmt.Printf("failed to parse rules from file %q:\n%s\n", inputFilePath, err.Error())
-		os.Exit(1)
+		fmt.Printf("Downloading rules from %q\n", rulesURL)
+
+		resp, err := http.Get(rulesURL)
+		if err != nil {
+			fmt.Printf("failed to download rules from %q:\n%s\n", rulesURL, err.Error())
+			os.Exit(1)
+		}
+		defer resp.Body.Close()
+
+		parsedRules, err = ruleparser.ParseRules(resp.Body)
+		if err != nil {
+			fmt.Printf("failed to parse rules from %q:\n%s\n", rulesURL, err.Error())
+			os.Exit(1)
+		}
+	} else {
+		var err error
+
+		parsedRules, err = ruleparser.ParseFile(*rulesFilePath)
+		if err != nil {
+			fmt.Printf("failed to parse rules from file %q:\n%s\n", *rulesFilePath, err.Error())
+			os.Exit(1)
+		}
 	}
 
 	outFd, err := os.Create(*outputFilePath)
