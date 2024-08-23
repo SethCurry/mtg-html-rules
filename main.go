@@ -17,8 +17,14 @@ func usage() {
 func main() {
 	outputFilePath := flag.String("output", "./mtgcr.html", "The path to write the HTML rules file to.")
 	rulesFilePath := flag.String("rules", "", "The path to the rules file to parse.")
+	isHelp := flag.Bool("help", false, "Print the help text and exit.")
 
 	flag.Parse()
+
+	if *isHelp {
+		usage()
+		os.Exit(0)
+	}
 
 	var parsedRules *ruleparser.Rules
 
