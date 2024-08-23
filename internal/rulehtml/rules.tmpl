@@ -104,10 +104,14 @@
       <h3 id="section-{{$sectionNum}}">{{$sectionNum}}: {{ $sectionRule.Name }}</h2>
       {{ range $subsectionNum, $subsectionRule := $sectionRule.Subsections }}
       <div class="subsection">
-        <h4 id="rule-{{$subsectionNum}}">{{$subsectionNum}}: {{ $subsectionRule.Name }}</h3>
+        <a href="#rule-{{$subsectionNum}}">
+          <h4 id="rule-{{$subsectionNum}}">{{$subsectionNum}}: {{ $subsectionRule.Name }}</h3>
+        </a>
         {{ range $ruleNum, $rule := $subsectionRule.Rules }}
         <div class="rule" id="rule-{{$subsectionNum}}_{{$ruleNum}}">
-          {{$subsectionNum}}.{{$ruleNum}}:
+          <a href="#rule-{{$subsectionNum}}_{{$ruleNum}}">
+            {{$subsectionNum}}.{{$ruleNum}}:
+          </a>
           {{ template "content" $rule.Contents }}
 
           {{ range $exampleIndex, $example := $rule.Examples }}
@@ -116,7 +120,9 @@
 
           {{ range $subruleLetter, $subrule := $rule.Subrules }}
           <div class="subrule" id="rule-{{$subsectionNum}}_{{$ruleNum}}{{$subruleLetter}}">
-            {{$subsectionNum}}.{{$ruleNum}}{{$subruleLetter}}: 
+            <a href="#rule-{{$subsectionNum}}_{{$ruleNum}}{{$subruleLetter}}">
+              {{$subsectionNum}}.{{$ruleNum}}{{$subruleLetter}}: 
+            </a>
 
             {{ template "content" $subrule.Contents }}
 
