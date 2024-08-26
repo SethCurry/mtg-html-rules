@@ -25,12 +25,13 @@
 
 <html>
 <head>
-  <meta http-equiv="content-type" content="text/html; charset=utf-8">
-  <link href="https://cdn.jsdelivr.net/npm/mana-font@latest/css/mana.css" rel="stylesheet" type="text/css" /> 
+  <meta http-equiv="content-type" content="text/html; charset=utf-8" http-equiv="Content-Security-Policy" content="font-src 'self' data:; img-src 'self' data:; default-src 'self' https://fonts.googleapis.com/ https://fonts.gstatic.com/">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Titillium+Web:ital,wght@0,200;0,300;0,400;0,600;0,700;0,900;1,200;1,300;1,400;1,600;1,700&display=swap" rel="stylesheet">
   <style>
+    {{ .ManaCSS }}
+
     .section {
       background-color: #46494C;
       color: #b9b6b3;
@@ -99,7 +100,7 @@
 <body>
   <div>
     <h2>Rules</h1>
-    {{ range $sectionNum, $sectionRule := .Sections }}
+    {{ range $sectionNum, $sectionRule := .Rules.Sections }}
     <div class="section">
       <h3 id="section-{{$sectionNum}}">{{$sectionNum}}: {{ $sectionRule.Name }}</h2>
       {{ range $subsectionNum, $subsectionRule := $sectionRule.Subsections }}
@@ -141,7 +142,7 @@
   <div>
     <h2>Glossary</h1>
     <ul>
-      {{ range $keyword, $definition := .Glossary }}
+      {{ range $keyword, $definition := .Rules.Glossary }}
       <li>{{$keyword}}: {{$definition}}</li>
       {{ end }}
     </ul>
