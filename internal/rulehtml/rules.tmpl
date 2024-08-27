@@ -1,7 +1,7 @@
 {{ define "content" }}
   {{ range $contentIndex, $content := . }}
   {{ if eq $content.Type "text" }}
-    {{$content.Value }}
+    {{ $content.Value }}
   {{ end }}
   {{ if eq $content.Type "reference" }}
     <a href="#rule-{{ElementID $content.Value}}">{{ $content.Value }}</a>
@@ -103,15 +103,15 @@
 </head>
 <body>
   <div>
-    <nav id="rules-nav" style="position: fixed; top: 0; left: 0; width: 100%; background-color: #46494C; margin-bottom: 1em; display: flex; flex-direction: row; padding: 1em;">
+    <nav id="rules-nav" style="position: fixed; top: 0; left: 0; width: 100%; background-color: #46494C; margin-bottom: 1em; display: flex; flex-direction: row; padding: 1em; height: 1.5em;">
       <span style="flex: 1 1 auto;">mtg-html-rules</span>
       <span id="rules-nav-title" style="flex: 1 1 auto;">
-        Rules
-        <ul id="sections-menu" style="display: none;">
+        <button>Rules</button>
+        <ul id="sections-menu" style="display: none; background-color: #46494C;">
           {{ range $sectionNum, $sectionRule := .Rules.Sections }}
           <li>
             <div>
-            <a sectionNum="{{$sectionNum}}" class="section-link" href="#section-{{$sectionNum}}">{{ $sectionRule.Name }}</a><span sectionNum="{{$sectionNum}}" class="subsections-expand" id="subsections-expand-{{$sectionNum}}"> ></span>
+            <a sectionNum="{{$sectionNum}}" class="section-link" href="#section-{{$sectionNum}}">{{ $sectionRule.Name }}</a><span sectionNum="{{$sectionNum}}" class="subsections-expand" id="subsections-expand-{{$sectionNum}}"> <button>></button></span>
             <ul id="subsections-menu-{{$sectionNum}}" style="display: none;">
               {{ range $subsectionNum, $subsectionRule := $sectionRule.Subsections }}
               <li>
@@ -147,11 +147,13 @@
           <a href="#rule-{{$subsectionNum}}_{{$ruleNum}}">
             {{$subsectionNum}}.{{$ruleNum}}:
           </a>
+          <p class="content">
           {{ template "content" $rule.Contents }}
 
           {{ range $exampleIndex, $example := $rule.Examples }}
             {{ template "example" $example }}
           {{ end }}
+          </p>
 
           {{ range $subruleLetter, $subrule := $rule.Subrules }}
           <div class="subrule" id="rule-{{$subsectionNum}}_{{$ruleNum}}{{$subruleLetter}}">
@@ -159,11 +161,13 @@
               {{$subsectionNum}}.{{$ruleNum}}{{$subruleLetter}}: 
             </a>
 
+            <p class="content">
             {{ template "content" $subrule.Contents }}
 
             {{ range $exampleIndex, $example := $subrule.Examples }}
               {{ template "example" $example }}
             {{ end }}
+            </p>
           </div>
           {{end}}
         </div>

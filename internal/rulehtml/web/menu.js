@@ -9,6 +9,16 @@ document.addEventListener("DOMContentLoaded", function (event) {
   const searchHaystack = [];
   const searchIDs = [];
 
+  document.querySelectorAll(".content").forEach((content) => {
+    const parent = content.parentElement;
+    const ruleNumber = parent.children[0].innerText;
+
+    const ruleID = content.parentElement.id;
+    searchHaystack.push(ruleNumber + " " + content.innerText);
+    searchIDs.push(ruleID);
+  });
+
+  /*
   document.querySelectorAll(".rule").forEach((rule) => {
     const ruleID = rule.id;
     searchHaystack.push(rule.innerText);
@@ -20,6 +30,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
     searchHaystack.push(subrule.innerText);
     searchIDs.push(subruleID);
   });
+  */
 
   function closeMenu() {
     sectionMenu.style.display = "none";
@@ -86,6 +97,8 @@ document.addEventListener("DOMContentLoaded", function (event) {
         ? document.createElement("mark")
         : document.createElement("span");
       el.textContent = part;
+      el.style.textDecoration = "none";
+      el.style.color = "white";
       return el;
     };
 
@@ -123,7 +136,19 @@ document.addEventListener("DOMContentLoaded", function (event) {
         searchResultsDiv.style.display = "none";
       });
 
+      matchLink.addEventListener("mouseover", () => {
+        matchLink.style.backgroundColor = "black";
+      });
+
+      matchLink.addEventListener("mouseout", () => {
+        matchLink.style.backgroundColor = "#46494C";
+      });
+
       domElems.push(matchLink);
+      const divider = document.createElement("hr");
+      divider.style.color = "white";
+      divider.style.width = "100%";
+      domElems.push(divider);
 
       /*
       let resultLink = document.createElement("a");
