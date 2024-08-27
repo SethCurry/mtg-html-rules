@@ -39,6 +39,9 @@ var mplantinFontTTF string
 //go:embed web/mplantin.woff
 var mplantinFontWOFF string
 
+//go:embed web/menu.js
+var menuJS string
+
 type encodedFont struct {
 	EOT  string
 	SVG  string
@@ -98,6 +101,7 @@ func getElementID(elementName string) (string, error) {
 type templateData struct {
 	Rules   *ruleparser.Rules
 	ManaCSS template.CSS
+	MenuJS  template.JS
 }
 
 func generateManaCSS() (string, error) {
@@ -133,6 +137,7 @@ func GenerateTemplate(parsedRules *ruleparser.Rules, toWriter io.Writer) error {
 	data := templateData{
 		Rules:   parsedRules,
 		ManaCSS: template.CSS(manaCSS),
+		MenuJS:  template.JS(menuJS),
 	}
 
 	err = parsedTemplate.Execute(toWriter, &data)
