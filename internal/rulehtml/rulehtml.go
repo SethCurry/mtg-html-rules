@@ -42,6 +42,9 @@ var mplantinFontWOFF string
 //go:embed web/menu.js
 var menuJS string
 
+//go:embed web/ufuzzy.min.js
+var ufuzzyJS string
+
 type encodedFont struct {
 	EOT  string
 	SVG  string
@@ -99,9 +102,10 @@ func getElementID(elementName string) (string, error) {
 }
 
 type templateData struct {
-	Rules   *ruleparser.Rules
-	ManaCSS template.CSS
-	MenuJS  template.JS
+	Rules    *ruleparser.Rules
+	ManaCSS  template.CSS
+	MenuJS   template.JS
+	UFuzzyJS template.JS
 }
 
 func generateManaCSS() (string, error) {
@@ -135,9 +139,10 @@ func GenerateTemplate(parsedRules *ruleparser.Rules, toWriter io.Writer) error {
 	}
 
 	data := templateData{
-		Rules:   parsedRules,
-		ManaCSS: template.CSS(manaCSS),
-		MenuJS:  template.JS(menuJS),
+		Rules:    parsedRules,
+		ManaCSS:  template.CSS(manaCSS),
+		MenuJS:   template.JS(menuJS),
+		UFuzzyJS: template.JS(ufuzzyJS),
 	}
 
 	err = parsedTemplate.Execute(toWriter, &data)

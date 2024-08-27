@@ -94,33 +94,8 @@
       font-weight: 300;
       overflow-y: scroll;
     }
-    nav li:hover {
-      background: #EEEEEE;
-    }
-    nav li>ul {
-      display: inline-block;
-      margin: 0;
-      padding: 0;
-    }
-    nav .collapsable li>ul {
-      display: none;
-    }
-    nav li>ul::before {
-      content: ": { ";
-    }
-    nav li>ul::after {
-      content: " } ";
-    }
-    nav li:hover>ul {
-      display: inline-block;
-    }
-    nav li>ul>li {
-      display: inline-block;
-    }
-    nav li>ul>li+li::before {
-      content: ", ";
-    }
   </style>
+  <script>{{.UFuzzyJS}}</script>
   <script>{{.MenuJS}}</script>
 </head>
 <body>
@@ -146,7 +121,13 @@
           {{ end }}
         </ul>
       </span>
+      <span style="margin-right: 1em;">
+        <input type="text" id="search-input" placeholder="Search">
+      </span>
     </nav>
+
+    <div id="search-results" style="position: fixed; top: 3em; right: 0; width: 25%; background-color: #46494C; margin-bottom: 1em; display: none; flex-direction: column; padding: 1em;">
+    </div>
     
     <h1 style="margin-top: 1em">Magic: The Gathering Rules</h1>
     <h2>Rules</h2>
