@@ -149,14 +149,6 @@ document.addEventListener("DOMContentLoaded", function (event) {
       divider.style.color = "white";
       divider.style.width = "100%";
       domElems.push(divider);
-
-      /*
-      let resultLink = document.createElement("a");
-      resultLink.setAttribute("href", `#${searchIDs[idxs[i][0]]}`);
-      resultLink.textContent = searchHaystack[info.idx[order[i]]];
-
-      searchResultsDiv.append(resultLink);
-      */
     }
 
     searchResultsDiv.append(...domElems);
