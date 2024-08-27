@@ -12,37 +12,37 @@ import (
 	"github.com/SethCurry/mtg-html-rules/pkg/ruleparser"
 )
 
-//go:embed web/mana.css
+//go:embed web/vendor/mana/mana.css
 var manaCSSTemplate string
 
-//go:embed web/mana.eot
+//go:embed web/vendor/mana/mana.eot
 var manaFontEOT string
 
-//go:embed web/mana.svg
+//go:embed web/vendor/mana/mana.svg
 var manaFontSVG string
 
-//go:embed web/mana.ttf
+//go:embed web/vendor/mana/mana.ttf
 var manaFontTTF string
 
-//go:embed web/mana.woff
+//go:embed web/vendor/mana/mana.woff
 var manaFontWOFF string
 
-//go:embed web/mplantin.eot
+//go:embed web/vendor/mplantin/mplantin.eot
 var mplantinFontEOT string
 
-//go:embed web/mplantin.svg
+//go:embed web/vendor/mplantin/mplantin.svg
 var mplantinFontSVG string
 
-//go:embed web/mplantin.ttf
+//go:embed web/vendor/mplantin/mplantin.ttf
 var mplantinFontTTF string
 
-//go:embed web/mplantin.woff
+//go:embed web/vendor/mplantin/mplantin.woff
 var mplantinFontWOFF string
 
 //go:embed web/menu.js
 var menuJS string
 
-//go:embed web/ufuzzy.min.js
+//go:embed web/vendor/ufuzzy.min.js
 var ufuzzyJS string
 
 type encodedFont struct {
