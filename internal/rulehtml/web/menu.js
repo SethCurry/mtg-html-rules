@@ -18,20 +18,6 @@ document.addEventListener("DOMContentLoaded", function (event) {
     searchIDs.push(ruleID);
   });
 
-  /*
-  document.querySelectorAll(".rule").forEach((rule) => {
-    const ruleID = rule.id;
-    searchHaystack.push(rule.innerText);
-    searchIDs.push(ruleID);
-  });
-
-  document.querySelectorAll(".subrule").forEach((subrule) => {
-    const subruleID = subrule.id;
-    searchHaystack.push(subrule.innerText);
-    searchIDs.push(subruleID);
-  });
-  */
-
   function closeMenu() {
     sectionMenu.style.display = "none";
     sectionLinks.forEach((sectionLink) => {
