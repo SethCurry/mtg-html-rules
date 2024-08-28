@@ -27,16 +27,16 @@ var manaFontTTF string
 //go:embed web/vendor/mana/mana.woff
 var manaFontWOFF string
 
-//go:embed web/vendor/mplantin/mplantin.eot
+//go:embed web/vendor/mana/mplantin.eot
 var mplantinFontEOT string
 
-//go:embed web/vendor/mplantin/mplantin.svg
+//go:embed web/vendor/mana/mplantin.svg
 var mplantinFontSVG string
 
-//go:embed web/vendor/mplantin/mplantin.ttf
+//go:embed web/vendor/mana/mplantin.ttf
 var mplantinFontTTF string
 
-//go:embed web/vendor/mplantin/mplantin.woff
+//go:embed web/vendor/mana/mplantin.woff
 var mplantinFontWOFF string
 
 //go:embed web/menu.js
@@ -44,6 +44,9 @@ var menuJS string
 
 //go:embed web/vendor/ufuzzy.min.js
 var ufuzzyJS string
+
+//go:embed web/main.css
+var mainCSS string
 
 type encodedFont struct {
 	EOT  string
@@ -106,6 +109,7 @@ type templateData struct {
 	ManaCSS  template.CSS
 	MenuJS   template.JS
 	UFuzzyJS template.JS
+	MainCSS  template.CSS
 }
 
 func generateManaCSS() (string, error) {
@@ -143,6 +147,7 @@ func GenerateTemplate(parsedRules *ruleparser.Rules, toWriter io.Writer) error {
 		ManaCSS:  template.CSS(manaCSS),
 		MenuJS:   template.JS(menuJS),
 		UFuzzyJS: template.JS(ufuzzyJS),
+		MainCSS:  template.CSS(mainCSS),
 	}
 
 	err = parsedTemplate.Execute(toWriter, &data)

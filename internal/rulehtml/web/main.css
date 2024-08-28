@@ -1,0 +1,66 @@
+.section {
+  background-color: #46494c;
+  color: #b9b6b3;
+  padding: 0.5em;
+  margin: 0.5em;
+  border-radius: 1em;
+}
+.subsection {
+  background-color: #4c5c68;
+  color: #b3a397;
+  padding: 0.5em;
+  margin: 0.5em;
+  border-radius: 1em;
+}
+.rule {
+  background-color: #c5c3c6;
+  color: #3a3c39;
+  padding: 0.5em;
+  margin: 0.5em;
+  border-radius: 1em;
+}
+.subrule {
+  background-color: #dcdcdd;
+  color: #232322;
+  padding: 1em;
+  margin: 0.5em;
+  border-radius: 1em;
+}
+.example {
+  margin-left: 2em;
+  margin-right: 2em;
+  margin-top: 0.5em;
+  margin-bottom: 0.5em;
+  border-radius: 1em;
+  display: flex;
+  flex-direction: column;
+}
+.example-title {
+  flex: 1 1 auto;
+  background-color: #4c5c68;
+  color: #b3a397;
+  border-top-left-radius: 1em;
+  border-top-right-radius: 1em;
+  padding: 0.5em;
+  font-size: 1.1em;
+}
+.example-body {
+  flex: 5 1 auto;
+  border-bottom-left-radius: 1em;
+  border-bottom-right-radius: 1em;
+  padding-bottom: 1em;
+  background-color: #46494c;
+  color: #b9b6b3;
+  padding: 0.5em;
+}
+body {
+  padding: 1em;
+  background-color: #c5c3c6;
+  font-family: "Titillium Web", sans-serif;
+  font-style: normal;
+  font-weight: 300;
+  overflow-y: scroll;
+}
+html {
+  scroll-padding-top: 3em; /* height of sticky header */
+}
