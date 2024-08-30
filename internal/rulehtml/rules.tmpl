@@ -122,12 +122,19 @@
     {{ end}}
   </div>
   <div>
-    <h2>Glossary</h2>
+    <h2>Credits</h3>
+    <p>
+      Created by <a href="https://github.com/SethCurry">Seth Curry</a>.
+    </p>
+    <h3>With Thanks To:</h3>
     <ul>
-      {{ range $keyword, $definition := .Rules.Glossary }}
-      <li>{{$keyword}}: {{$definition}}</li>
-      {{ end }}
+      <li>andrewgioia for <a href="https://github.com/andrewgioia/mana">the Mana font</a> used to display mana symbols.</li>
+      <li>Wizards of the Coast for making the game</li>
     </ul>
-  </div>
+    <p>
+      Magic: The Gathering is the property of Wizards of the Coast.  This site does not own
+      these rules, and only attempts to display Wizards of the Coast's property in a way
+      that is easier for players to consume.
+    </p>
 </body>
 </html>
