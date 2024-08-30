@@ -116,7 +116,9 @@ function handleSearchInput(uf, searchHaystack, searchIDs) {
 }
 
 document.addEventListener("DOMContentLoaded", function (event) {
-  const menuRulesNav = document.getElementById("rules-nav-dropdown");
+  const menuRulesDropdownButton = document.getElementById(
+    "rules-dropdown-button"
+  );
   const sectionMenu = document.getElementById("sections-menu");
   const sectionLinks = document.querySelectorAll(".section-link-name");
   const subsectionsExpand = document.querySelectorAll(".subsections-expand");
@@ -141,7 +143,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
     });
   });
 
-  menuRulesNav.addEventListener("click", () => {
+  menuRulesDropdownButton.addEventListener("click", () => {
     sectionMenu.style.display = "flex";
   });
 
