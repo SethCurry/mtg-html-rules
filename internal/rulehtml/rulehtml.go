@@ -1,8 +1,6 @@
 package rulehtml
 
 import (
-	"bytes"
-	"encoding/base64"
 	"fmt"
 	"html/template"
 	"io"
@@ -10,35 +8,6 @@ import (
 
 	"github.com/SethCurry/mtg-html-rules/pkg/ruleparser"
 )
-
-type encodedFont struct {
-	EOT  string
-	SVG  string
-	TTF  string
-	WOFF string
-}
-
-type fontData struct {
-	Mana     encodedFont
-	MPlantin encodedFont
-}
-
-func newFontData() fontData {
-	return fontData{
-		Mana: encodedFont{
-			EOT:  base64.RawStdEncoding.EncodeToString([]byte(manaFontEOT)),
-			SVG:  base64.RawStdEncoding.EncodeToString([]byte(manaFontSVG)),
-			TTF:  base64.RawStdEncoding.EncodeToString([]byte(manaFontTTF)),
-			WOFF: base64.RawStdEncoding.EncodeToString([]byte(manaFontWOFF)),
-		},
-		MPlantin: encodedFont{
-			EOT:  base64.RawStdEncoding.EncodeToString([]byte(mplantinFontEOT)),
-			SVG:  base64.RawStdEncoding.EncodeToString([]byte(mplantinFontSVG)),
-			TTF:  base64.RawStdEncoding.EncodeToString([]byte(mplantinFontTTF)),
-			WOFF: base64.RawStdEncoding.EncodeToString([]byte(mplantinFontWOFF)),
-		},
-	}
-}
 
 func manaSymbolToClass(symbol string) (string, error) {
 	switch symbol {
@@ -65,27 +34,12 @@ func getElementID(elementName string) (string, error) {
 }
 
 type templateData struct {
-	Rules    *ruleparser.Rules
-	ManaCSS  template.CSS
-	MainJS   template.JS
-	UFuzzyJS template.JS
-	MainCSS  template.CSS
-}
-
-func generateManaCSS() (string, error) {
-	parsedTemplate, err := template.New("mana.css").Parse(manaCSSTemplate)
-	if err != nil {
-		return "", fmt.Errorf("failed to parse mana.css template: %w", err)
-	}
-
-	var manaCSS bytes.Buffer
-
-	err = parsedTemplate.Execute(&manaCSS, newFontData())
-	if err != nil {
-		return "", fmt.Errorf("failed to execute mana.css template: %w", err)
-	}
-
-	return manaCSS.String(), nil
+	Rules            *ruleparser.Rules
+	EmbeddedFontsCSS template.CSS
+	ManaCSS          template.CSS
+	MainJS           template.JS
+	UFuzzyJS         template.JS
+	MainCSS          template.CSS
 }
 
 func GenerateTemplate(parsedRules *ruleparser.Rules, toWriter io.Writer) error {
@@ -97,17 +51,13 @@ func GenerateTemplate(parsedRules *ruleparser.Rules, toWriter io.Writer) error {
 		return fmt.Errorf("failed to parse template: %w", err)
 	}
 
-	manaCSS, err := generateManaCSS()
-	if err != nil {
-		return fmt.Errorf("failed to generate mana.css: %w", err)
-	}
-
 	data := templateData{
-		Rules:    parsedRules,
-		ManaCSS:  template.CSS(manaCSS),
-		MainJS:   template.JS(mainJS),
-		UFuzzyJS: template.JS(ufuzzyJS),
-		MainCSS:  template.CSS(mainCSS),
+		Rules:            parsedRules,
+		ManaCSS:          template.CSS(manaCSS),
+		EmbeddedFontsCSS: template.CSS(embeddedFontsCSS),
+		MainJS:           template.JS(mainJS),
+		UFuzzyJS:         template.JS(ufuzzyJS),
+		MainCSS:          template.CSS(mainCSS),
 	}
 
 	err = parsedTemplate.Execute(toWriter, &data)

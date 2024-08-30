@@ -1,15 +1,3 @@
-@font-face {
-  font-family: "Mana";
-  src: url(data:font/woff;base64,{{.Mana.WOFF}});
-  font-weight: normal;
-  font-style: normal;
-}
-@font-face {
-  font-family: "MPlantin";
-  src: url(data:font/woff;charset=utf-8;base64,{{.MPlantin.WOFF}});
-  font-weight: normal;
-  font-style: normal;
-}
 .ms {
   display: inline-block;
   font: normal normal normal 14px Mana;
@@ -3057,5 +3045,3 @@ span.ms-half > .ms-cost {
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
-
-/*# sourceMappingURL=mana.css.map */
