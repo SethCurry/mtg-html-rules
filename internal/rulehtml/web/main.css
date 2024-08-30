@@ -5,6 +5,7 @@
   margin: 0.5em;
   border-radius: 1em;
 }
+
 .subsection {
   background-color: #4c5c68;
   color: #b3a397;
@@ -12,6 +13,7 @@
   margin: 0.5em;
   border-radius: 1em;
 }
+
 .rule {
   background-color: #c5c3c6;
   color: #3a3c39;
@@ -19,6 +21,7 @@
   margin: 0.5em;
   border-radius: 1em;
 }
+
 .subrule {
   background-color: #dcdcdd;
   color: #232322;
@@ -26,6 +29,7 @@
   margin: 0.5em;
   border-radius: 1em;
 }
+
 .example {
   margin-left: 2em;
   margin-right: 2em;
@@ -35,6 +39,7 @@
   display: flex;
   flex-direction: column;
 }
+
 .example-title {
   flex: 1 1 auto;
   background-color: #4c5c68;
@@ -44,6 +49,7 @@
   padding: 0.5em;
   font-size: 1.1em;
 }
+
 .example-body {
   flex: 5 1 auto;
   border-bottom-left-radius: 1em;
@@ -53,6 +59,7 @@
   color: #b9b6b3;
   padding: 0.5em;
 }
+
 body {
   padding: 0.5em;
   background-color: #c5c3c6;
@@ -107,6 +114,97 @@ body {
   color: rgba(0, 0, 0, 0.65);
   transform: translateY(0);
 }
+
+#search-results {
+  position: fixed;
+  top: 3em;
+  right: 0;
+  width: 25%;
+  background-color: #46494c;
+  margin-bottom: 1em;
+  flex-direction: column;
+  padding: 1em;
+}
+
+.subsections-expand-button {
+  width: 3em;
+  height: 2em;
+  margin-left: 2em;
+}
+
+#rules-nav-dropdown {
+  border-radius: 1rem;
+}
+
+.menu {
+  list-style-type: none;
+  background-color: #46494c;
+  padding: 1em;
+  width: 100%;
+}
+
+#sections-menu {
+  border-radius: 1rem;
+  padding: 1rem;
+  display: none;
+  flex-direction: column;
+  list-style-type: none;
+  background-color: #46494c;
+  position: relative;
+  top: -1em;
+  margin: 1em;
+}
+
+.section-link {
+  display: flex;
+}
+
+#rules-nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background-color: #46494c;
+  margin-bottom: 1em;
+  display: flex;
+  flex-direction: row;
+  padding: 1em;
+  height: 1.5em;
+}
+
+#nav-logo {
+  flex: 1 1 auto;
+  color: white;
+  font-size: 1.5em;
+}
+
+.section-menu-item {
+  background-color: white;
+  border: 1px solid black;
+  padding: 0.5em;
+  border-radius: 0.5em;
+  width: 100%;
+}
+
+.menu-item {
+  background-color: white;
+  border: 1px solid black;
+  color: black;
+  padding: 0.5em;
+  border-radius: 0.5em;
+  width: 100%;
+}
+
+.menu-item:hover {
+  background-color: #46494c;
+  color: white;
+}
+
+.section-menu-item:hover {
+  background-color: #46494c;
+  color: white;
+}
+
 html {
   scroll-padding-top: 3em; /* height of sticky header */
 }

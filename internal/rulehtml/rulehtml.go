@@ -2,7 +2,6 @@ package rulehtml
 
 import (
 	"bytes"
-	_ "embed"
 	"encoding/base64"
 	"fmt"
 	"html/template"
@@ -11,42 +10,6 @@ import (
 
 	"github.com/SethCurry/mtg-html-rules/pkg/ruleparser"
 )
-
-//go:embed web/vendor/mana/mana.css
-var manaCSSTemplate string
-
-//go:embed web/vendor/mana/mana.eot
-var manaFontEOT string
-
-//go:embed web/vendor/mana/mana.svg
-var manaFontSVG string
-
-//go:embed web/vendor/mana/mana.ttf
-var manaFontTTF string
-
-//go:embed web/vendor/mana/mana.woff
-var manaFontWOFF string
-
-//go:embed web/vendor/mana/mplantin.eot
-var mplantinFontEOT string
-
-//go:embed web/vendor/mana/mplantin.svg
-var mplantinFontSVG string
-
-//go:embed web/vendor/mana/mplantin.ttf
-var mplantinFontTTF string
-
-//go:embed web/vendor/mana/mplantin.woff
-var mplantinFontWOFF string
-
-//go:embed web/menu.js
-var menuJS string
-
-//go:embed web/vendor/ufuzzy.min.js
-var ufuzzyJS string
-
-//go:embed web/main.css
-var mainCSS string
 
 type encodedFont struct {
 	EOT  string
@@ -77,9 +40,6 @@ func newFontData() fontData {
 	}
 }
 
-//go:embed rules.tmpl
-var rootTemplate string
-
 func manaSymbolToClass(symbol string) (string, error) {
 	switch symbol {
 	case "t", "T":
@@ -107,7 +67,7 @@ func getElementID(elementName string) (string, error) {
 type templateData struct {
 	Rules    *ruleparser.Rules
 	ManaCSS  template.CSS
-	MenuJS   template.JS
+	MainJS   template.JS
 	UFuzzyJS template.JS
 	MainCSS  template.CSS
 }
@@ -145,7 +105,7 @@ func GenerateTemplate(parsedRules *ruleparser.Rules, toWriter io.Writer) error {
 	data := templateData{
 		Rules:    parsedRules,
 		ManaCSS:  template.CSS(manaCSS),
-		MenuJS:   template.JS(menuJS),
+		MainJS:   template.JS(mainJS),
 		UFuzzyJS: template.JS(ufuzzyJS),
 		MainCSS:  template.CSS(mainCSS),
 	}
