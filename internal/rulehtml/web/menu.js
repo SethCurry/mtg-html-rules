@@ -86,10 +86,10 @@ document.addEventListener("DOMContentLoaded", function (event) {
         el.style.color = "black";
       } else {
         el = document.createElement("span");
+        el.style.color = "white";
       }
       el.textContent = part;
       el.style.textDecoration = "none";
-      el.style.color = "white";
       return el;
     };
 
