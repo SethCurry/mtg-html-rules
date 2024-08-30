@@ -79,9 +79,14 @@ document.addEventListener("DOMContentLoaded", function (event) {
     let domElems = [];
 
     const mark = (part, matched) => {
-      let el = matched
-        ? document.createElement("mark")
-        : document.createElement("span");
+      var el;
+
+      if (matched) {
+        el = document.createElement("mark");
+        el.style.color = "black";
+      } else {
+        el = document.createElement("span");
+      }
       el.textContent = part;
       el.style.textDecoration = "none";
       el.style.color = "white";
