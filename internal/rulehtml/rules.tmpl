@@ -38,7 +38,7 @@
   <div>
     <nav id="rules-nav">
       <span id="nav-logo">mtg-html-rules</span>
-      <span id="rules-nav-dropdown" style="flex: 1 1 auto; flex-direction: column;">
+      <span id="rules-nav-dropdown" style="flex: 1 1 auto; flex-direction: column">
         <button class="menu-button" style="height: 2em; width: 5em;">Rules</button>
         <ul id="sections-menu" class="menu">
           {{ range $sectionNum, $sectionRule := .Rules.Sections }}
@@ -54,7 +54,7 @@
                 <ul id="subsections-menu-{{$sectionNum}}" class="section-menu-item menu" style="display: none;">
                   {{ range $subsectionNum, $subsectionRule := $sectionRule.Subsections }}
                   <li style="height: 2em;">
-                    <span style="padding-left: 0.5em; padding-right: 0.5em; padding-top: 0.25em; padding-bottom: 0.25em;" class="subsection-link menu-item" subsection="{{$subsectionNum}}">{{$subsectionNum}}: {{ $subsectionRule.Name }}</span>
+                    <span style="padding-left: 0.5em; padding-right: 0.5em; padding-top: 0.25em; padding-bottom: 0.25em; cursor: pointer;" class="subsection-link menu-item" subsection="{{$subsectionNum}}">{{$subsectionNum}}: {{ $subsectionRule.Name }}</span>
                   </li>
                   {{ end }}
                 </ul>

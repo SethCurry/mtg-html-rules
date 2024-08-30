@@ -153,6 +153,8 @@ body {
   position: relative;
   top: -1em;
   margin: 1em;
+  overflow-y: scroll;
+  height: 85vh;
 }
 
 .section-link {
@@ -186,6 +188,10 @@ body {
   width: 100%;
 }
 
+.section-link-name {
+  cursor: pointer;
+}
+
 .menu-item {
   background-color: white;
   border: 1px solid black;
@@ -203,6 +209,11 @@ body {
 .section-menu-item:hover {
   background-color: #46494c;
   color: white;
+}
+
+#search-results {
+  height: 85vh;
+  overflow-y: scroll;
 }
 
 html {
