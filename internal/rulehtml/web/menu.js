@@ -1,11 +1,10 @@
-document.addEventListener("DOMContentLoaded", function (event) {
-  const menuRulesNav = document.getElementById("rules-nav-title");
-  const sectionMenu = document.getElementById("sections-menu");
-  const sectionLinks = document.querySelectorAll(".section-link");
-  const subsectionsExpand = document.querySelectorAll(".subsections-expand");
-  const subsectionLinks = document.querySelectorAll(".subsection-link");
-  const rulesNav = document.getElementById("rules-nav");
-
+// getContentsToSearch returns a tuple, where the first element is an array of HTML anchors
+// and the second element is an array of strings to search through.
+//
+// The arrays are paired, so that the anchor at index i in the first array points to the
+// contents of index i in the second array.  It's basically a dictionary decomposed into
+// two arrays.
+function getContentsToSearch() {
   const searchHaystack = [];
   const searchIDs = [];
 
@@ -18,26 +17,43 @@ document.addEventListener("DOMContentLoaded", function (event) {
     searchIDs.push(ruleID);
   });
 
-  function closeMenu() {
-    sectionMenu.style.display = "none";
-    sectionLinks.forEach((sectionLink) => {
-      const sectionNum = sectionLink.getAttribute("sectionNum");
-      const subsectionMenu = document.getElementById(
-        `subsections-menu-${sectionNum}`
-      );
-      subsectionMenu.style.display = "none";
-    });
-  }
+  return [searchIDs, searchHaystack];
+}
+
+// closeRulesMenu closes the menu opened by the "Rules" button in the middle of the top nav bar.
+function closeRulesMenu() {
+  const sectionMenu = document.getElementById("sections-menu");
+  const sectionLinks = document.querySelectorAll(".section-link");
+
+  sectionMenu.style.display = "none";
+  sectionLinks.forEach((sectionLink) => {
+    const sectionNum = sectionLink.getAttribute("sectionNum");
+    const subsectionMenu = document.getElementById(
+      `subsections-menu-${sectionNum}`
+    );
+    subsectionMenu.style.display = "none";
+  });
+}
+
+document.addEventListener("DOMContentLoaded", function (event) {
+  const menuRulesNav = document.getElementById("rules-nav-title");
+  const sectionMenu = document.getElementById("sections-menu");
+  const sectionLinks = document.querySelectorAll(".section-link");
+  const subsectionsExpand = document.querySelectorAll(".subsections-expand");
+  const subsectionLinks = document.querySelectorAll(".subsection-link");
+  const rulesNav = document.getElementById("rules-nav");
+
+  const [searchIDs, searchHaystack] = getContentsToSearch();
 
   sectionLinks.forEach((sectionLink) => {
     sectionLink.addEventListener("click", () => {
-      closeMenu();
+      closeRulesMenu();
     });
   });
 
   subsectionLinks.forEach((subsectionLink) => {
     subsectionLink.addEventListener("click", () => {
-      closeMenu();
+      closeRulesMenu();
     });
   });
 
@@ -46,7 +62,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
   });
 
   rulesNav.addEventListener("mouseleave", () => {
-    closeMenu();
+    closeRulesMenu();
   });
 
   subsectionsExpand.forEach((subsectionExpander) => {
