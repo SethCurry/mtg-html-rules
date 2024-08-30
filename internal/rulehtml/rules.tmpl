@@ -1,7 +1,7 @@
 {{ define "content" }}
   {{ range $contentIndex, $content := . }}
   {{ if eq $content.Type "text" }}
-    {{$content.Value }}
+    {{ $content.Value }}
   {{ end }}
   {{ if eq $content.Type "reference" }}
     <a href="#rule-{{ElementID $content.Value}}">{{ $content.Value }}</a>
@@ -30,93 +30,70 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Titillium+Web:ital,wght@0,200;0,300;0,400;0,600;0,700;0,900;1,200;1,300;1,400;1,600;1,700&display=swap" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/mana-font@latest/css/mana.css" rel="stylesheet" type="text/css" />
-  <style>
-    .section {
-      background-color: #46494C;
-      color: #b9b6b3;
-      padding: 0.5em;
-      margin: 0.5em;
-      border-radius: 1em;
-    }
-    .subsection {
-      background-color: #4C5C68;
-      color: #b3a397;
-      padding: 0.5em;
-      margin: 0.5em;
-      border-radius: 1em;
-    }
-    .rule {
-      background-color: #C5C3C6;
-      color: #3a3c39;
-      padding: 0.5em;
-      margin: 0.5em;
-      border-radius: 1em;
-    }
-    .subrule {
-      background-color: #DCDCDD;
-      color: #232322;
-      padding: 1em;
-      margin: 0.5em;
-      border-radius: 1em;
-    }
-    .example {
-      margin-left: 2em;
-      margin-right: 2em;
-      margin-top: 0.5em;
-      margin-bottom: 0.5em;
-      border-radius: 1em;
-      display: flex;
-      flex-direction: column;
-    }
-    .example-title {
-      flex 1 1 auto;
-      background-color: #4C5C68;
-      color: #b3a397;
-      border-top-left-radius: 1em;
-      border-top-right-radius: 1em;
-      padding: 0.5em;
-      font-size: 1.1em;
-    }
-    .example-body {
-      flex 5 1 auto;
-      border-bottom-left-radius: 1em;
-      border-bottom-right-radius: 1em;
-      padding-bottom: 1em;
-      background-color: #46494C;
-      color: #b9b6b3;
-      padding: 0.5em;
-    }
-    body {
-      padding: 1em;
-      background-color: #C5C3C6;
-      font-family: "Titillium Web", sans-serif;
-      font-style: normal;
-      font-weight: 300;
-      overflow-y: scroll;
-    }
-  </style>
+  <style>{{.MainCSS}}</style>
+  <script>{{.UFuzzyJS}}</script>
+  <script>{{.MainJS}}</script>
 </head>
 <body>
   <div>
-    <h2>Rules</h1>
+    <nav id="rules-nav">
+      <span id="nav-logo">mtg-html-rules</span>
+      <span id="rules-nav-dropdown" style="flex: 1 1 auto; flex-direction: column;">
+        <button class="menu-button" style="height: 2em; width: 5em;">Rules</button>
+        <ul id="sections-menu" class="menu">
+          {{ range $sectionNum, $sectionRule := .Rules.Sections }}
+          <li class="section-menu-item">
+            <div class="section-link" style="width: 100%;" sectionNum="{{$sectionNum}}">
+              <div style="display: flex; flex-direction: column; width: 100%;">
+                <div style="display: flex; flex-direction: row; width: 100%;">
+                  <span style="flex-grow: 1;" class="section-link-name" sectionNum="{{$sectionNum}}">{{ $sectionRule.Name }}</span>
+                  <span style="flex-grow: 0; margin-right: 1em;" sectionNum="{{$sectionNum}}" class="subsections-expand" id="subsections-expand-{{$sectionNum}}">
+                    <button class="menu-button subsections-expand-button">></button>
+                  </span>
+                </div>
+                <ul id="subsections-menu-{{$sectionNum}}" class="section-menu-item menu" style="display: none;">
+                  {{ range $subsectionNum, $subsectionRule := $sectionRule.Subsections }}
+                  <li style="height: 2em;">
+                    <span style="padding-left: 0.5em; padding-right: 0.5em; padding-top: 0.25em; padding-bottom: 0.25em;" class="subsection-link menu-item" subsection="{{$subsectionNum}}">{{$subsectionNum}}: {{ $subsectionRule.Name }}</span>
+                  </li>
+                  {{ end }}
+                </ul>
+              </div>
+            </div>
+          </li>
+          {{ end }}
+        </ul>
+      </span>
+      <span style="margin-right: 2em;">
+        <input type="text" id="search-input" placeholder="Search">
+      </span>
+    </nav>
+
+    <div id="search-results" style="display: none;">
+    </div>
+    
+    <h1 style="margin-top: 1em">Magic: The Gathering Rules</h1>
+    <h2>Rules</h2>
     {{ range $sectionNum, $sectionRule := .Rules.Sections }}
     <div class="section">
-      <h3 id="section-{{$sectionNum}}">{{$sectionNum}}: {{ $sectionRule.Name }}</h2>
+      <h3 id="section-{{$sectionNum}}">{{$sectionNum}}: {{ $sectionRule.Name }}</h3>
       {{ range $subsectionNum, $subsectionRule := $sectionRule.Subsections }}
       <div class="subsection">
         <a href="#rule-{{$subsectionNum}}">
-          <h4 id="rule-{{$subsectionNum}}">{{$subsectionNum}}: {{ $subsectionRule.Name }}</h3>
+          <h4 id="rule-{{$subsectionNum}}">{{$subsectionNum}}: {{ $subsectionRule.Name }}</h4>
         </a>
         {{ range $ruleNum, $rule := $subsectionRule.Rules }}
         <div class="rule" id="rule-{{$subsectionNum}}_{{$ruleNum}}">
           <a href="#rule-{{$subsectionNum}}_{{$ruleNum}}">
             {{$subsectionNum}}.{{$ruleNum}}:
           </a>
+          <p class="content">
           {{ template "content" $rule.Contents }}
 
           {{ range $exampleIndex, $example := $rule.Examples }}
             {{ template "example" $example }}
           {{ end }}
+          </p>
 
           {{ range $subruleLetter, $subrule := $rule.Subrules }}
           <div class="subrule" id="rule-{{$subsectionNum}}_{{$ruleNum}}{{$subruleLetter}}">
@@ -124,11 +101,13 @@
               {{$subsectionNum}}.{{$ruleNum}}{{$subruleLetter}}: 
             </a>
 
+            <p class="content">
             {{ template "content" $subrule.Contents }}
 
             {{ range $exampleIndex, $example := $subrule.Examples }}
               {{ template "example" $example }}
             {{ end }}
+            </p>
           </div>
           {{end}}
         </div>
@@ -139,7 +118,7 @@
     {{ end}}
   </div>
   <div>
-    <h2>Glossary</h1>
+    <h2>Glossary</h2>
     <ul>
       {{ range $keyword, $definition := .Rules.Glossary }}
       <li>{{$keyword}}: {{$definition}}</li>
