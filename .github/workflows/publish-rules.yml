@@ -13,6 +13,8 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-go@v4
+      - name: Generate bundle.js
+        run: go generate ./internal/rulehtml/web
       - name: Build mtg-html-rules
         run: go build .
       - name: Make _site directory
