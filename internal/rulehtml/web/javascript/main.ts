@@ -112,7 +112,14 @@ document.addEventListener("DOMContentLoaded", function (event) {
   searchInput.addEventListener("input", () => {
     handleSearchInput(uf, searchHaystack, searchIDs);
   });
-  searchInput.addEventListener("focusout", () => {
+  searchInput.addEventListener("focusout", (evt: FocusEvent) => {
+    if (evt.relatedTarget) {
+      const target = evt.relatedTarget as HTMLElement;
+      if (target.classList.contains("search-result")) {
+        return;
+      }
+    }
+
     hideSearchResults();
   });
 });

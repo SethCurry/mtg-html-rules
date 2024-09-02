@@ -118,6 +118,7 @@ export function handleSearchInput(
     matchEl.style.textDecoration = "none";
 
     let matchLink = document.createElement("a");
+    matchLink.classList.add("search-result");
     matchLink.setAttribute("href", `#${searchIDs[info.idx[infoIdx]]}`);
     matchLink.style.textDecoration = "none";
     matchLink.append(matchEl);
