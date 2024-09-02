@@ -6,6 +6,7 @@ import (
 	"io"
 	"strings"
 
+	"github.com/SethCurry/mtg-html-rules/internal/rulehtml/web"
 	"github.com/SethCurry/mtg-html-rules/pkg/ruleparser"
 )
 
@@ -38,7 +39,6 @@ type templateData struct {
 	EmbeddedFontsCSS template.CSS
 	ManaCSS          template.CSS
 	MainJS           template.JS
-	UFuzzyJS         template.JS
 	MainCSS          template.CSS
 }
 
@@ -55,8 +55,7 @@ func GenerateTemplate(parsedRules *ruleparser.Rules, toWriter io.Writer) error {
 		Rules:            parsedRules,
 		ManaCSS:          template.CSS(manaCSS),
 		EmbeddedFontsCSS: template.CSS(embeddedFontsCSS),
-		MainJS:           template.JS(mainJS),
-		UFuzzyJS:         template.JS(ufuzzyJS),
+		MainJS:           template.JS(web.BundleJS),
 		MainCSS:          template.CSS(mainCSS),
 	}
 

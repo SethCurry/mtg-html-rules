@@ -1,0 +1,16 @@
+# https://taskfile.dev
+
+version: "3"
+
+vars:
+  GREETING: Hello, World!
+
+tasks:
+  bundle:
+    cmds:
+      - go generate ./internal/rulehtml/web
+  build:
+    deps:
+      - bundle
+    cmds:
+      - go build .

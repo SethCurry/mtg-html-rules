@@ -171,6 +171,7 @@ body {
   flex-direction: row;
   padding: 1em;
   height: 1.5em;
+  z-index: 100;
 }
 
 #nav-logo {
