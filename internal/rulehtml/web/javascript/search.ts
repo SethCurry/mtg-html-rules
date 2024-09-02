@@ -24,7 +24,7 @@ export function getContentsToSearch() {
     const ruleID = content.parentElement.id;
 
     const contentP = content as HTMLParagraphElement;
-    searchHaystack.push(ruleNumber + " " + contentP.innerText);
+    searchHaystack.push(contentP.innerText);
     searchIDs.push(ruleID);
   });
 
