@@ -31,6 +31,15 @@ export function getContentsToSearch() {
   return [searchIDs, searchHaystack];
 }
 
+export function hideSearchResults() {
+  const searchResultsDiv = document.getElementById("search-results");
+  if (!searchResultsDiv) {
+    console.log("search results div is null");
+    return;
+  }
+  searchResultsDiv.style.display = "none";
+}
+
 export function handleSearchInput(
   uf,
   searchHaystack: string[],
@@ -51,6 +60,11 @@ export function handleSearchInput(
   const searchInputInput = searchInput as HTMLInputElement;
 
   const searchTerm = searchInputInput.value.toLowerCase();
+  if (searchTerm.length === 0) {
+    hideSearchResults();
+    return;
+  }
+
   let [idxs, info, order] = uf.search(searchHaystack, searchTerm);
   if (!order) {
     console.log("order is null");

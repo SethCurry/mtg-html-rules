@@ -1,4 +1,8 @@
-import { getContentsToSearch, handleSearchInput } from "./search";
+import {
+  getContentsToSearch,
+  handleSearchInput,
+  hideSearchResults,
+} from "./search";
 import uFuzzy from "./vendor/uFuzzy.esm";
 
 // closeRulesMenu closes the menu opened by the "Rules" button in the middle of the top nav bar.
@@ -107,5 +111,8 @@ document.addEventListener("DOMContentLoaded", function (event) {
 
   searchInput.addEventListener("input", () => {
     handleSearchInput(uf, searchHaystack, searchIDs);
+  });
+  searchInput.addEventListener("focusout", () => {
+    hideSearchResults();
   });
 });
