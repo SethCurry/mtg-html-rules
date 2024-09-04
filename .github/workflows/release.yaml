@@ -21,6 +21,8 @@ jobs:
             goos: windows
     steps:
       - uses: actions/checkout@v4
+      - name: Generate bundle.js
+        run: go generate ./internal/rulehtml/web
       - uses: wangyoucao577/go-release-action@v1
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}

@@ -14,5 +14,7 @@ jobs:
         uses: actions/setup-go@v4
         with:
           go-version: ${{matrix.go-version}}
+      - name: Generate bundle.js
+        run: go generate ./internal/rulehtml/web
       - name: Test go
         run: go test -race -covermode=atomic -coverprofile=coverage.out ./...
