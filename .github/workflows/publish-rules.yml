@@ -18,10 +18,12 @@ jobs:
       - name: Build mtg-html-rules
         run: go build .
       - name: Make _site directory
-        run: mkdir _site
+        run: mkdir _site _site/images
       - name: Generate HTML file
         run: ./mtg-html-rules --output _site/index.html
       - name: Copy favicon to _site
-        run: cp ./web/assets/favicon.png _site/favicon.png
+        run: cp ./web/assets/favicon.png _site/images/favicon.png
+      - name: Copy logo to _site
+        run: cp ./web/assets/logo.png _site/images/logo.png
       - uses: actions/upload-pages-artifact@v3
       - uses: actions/deploy-pages@v4
