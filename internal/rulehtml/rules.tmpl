@@ -42,9 +42,10 @@
 <body>
   <div>
     <nav id="rules-nav">
-      <span id="nav-logo" style="flex-grow: 0;">mtg-rules.com</span>
+      <img src="https://mtg-rules.com/images/logo.png" alt="mtg-rules.com logo" style="height: 2em; width: auto;" style="vertical-align: middle" />
+      <span id="nav-logo" style="flex-grow: 0; vertical-align: middle;">mtg-rules.com</span>
       <span id="rules-nav-dropdown" style="flex: 1 1 auto; flex-direction: column; margin-left: 3em;">
-        <button id="rules-dropdown-button" class="menu-button" style="height: 2em; width: 6em;">Rules | ▼</button>
+        <button id="rules-dropdown-button" class="menu-button" style="height: 2em; width: 6em; margin-top: 0.4em;">Rules | ▼</button>
         <ul id="sections-menu" class="menu">
           {{ range $sectionNum, $sectionRule := .Rules.Sections }}
           <li class="section-menu-item">
@@ -69,8 +70,8 @@
           {{ end }}
         </ul>
       </span>
-      <span style="margin-right: 2em;">
-        <input type="text" id="search-input" placeholder="Search">
+      <span style="margin-right: 2em; margin-top: 0.25em;">
+        <input style="vertical-align: middle;" type="text" id="search-input" placeholder="Search">
       </span>
     </nav>
 
