@@ -2,9 +2,7 @@ module github.com/SethCurry/mtg-html-rules
 
 go 1.22.5
 
-require golang.org/x/net v0.28.0
-
 require (
-	github.com/evanw/esbuild v0.23.1 // indirect
-	golang.org/x/sys v0.23.0 // indirect
+	github.com/SethCurry/gofall v0.0.0-20250220154907-6307bd10223d
+	golang.org/x/net v0.28.0
 )
