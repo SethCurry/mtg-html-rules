@@ -28,7 +28,7 @@ type ContentElement struct {
 
 //nolint:funlen
 func parseContent(content string) []*ContentElement {
-	refRegex := regexp.MustCompile(`[0-9]{3}\.[0-9]+[a-z]?`)
+	refRegex := regexp.MustCompile(`[0-9]{3}\.[0-9]+[a-z]+?`)
 	elements := []*ContentElement{}
 	acc := ""
 

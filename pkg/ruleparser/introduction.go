@@ -27,8 +27,9 @@ func ParseIntroduction(intro []string) (*Introduction, error) {
 	})
 
 	return &Introduction{
-		EffectiveDate:    strings.TrimRight(strings.TrimSpace(splitDateLine[1]), "."),
-		BodyPreDownload:  intro[pre],
-		BodyPostDownload: intro[post],
+		EffectiveDate: strings.TrimRight(strings.TrimSpace(splitDateLine[1]), "."),
+		// modify index offsets here since we searched progressively smaller slices to find them
+		BodyPreDownload:  intro[pre+dateLineIndex],
+		BodyPostDownload: intro[post+pre],
 	}, nil
 }
