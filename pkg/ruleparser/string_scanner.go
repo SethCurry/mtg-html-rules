@@ -13,11 +13,12 @@ type StringScanner struct {
 }
 
 func (s *StringScanner) Next() (rune, bool) {
-	if s.index >= len(s.data) {
+	data := []rune(s.data)
+	if s.index >= len(data) {
 		return 0, false
 	}
 
-	c := rune(s.data[s.index])
+	c := data[s.index]
 	s.index++
 
 	return c, true
