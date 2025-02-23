@@ -1,142 +1,48 @@
 {{ define "content" }}
   {{ range $contentIndex, $content := . }}
-  {{ if eq $content.Type "text" }}
-    {{ $content.Value }}
-  {{ end }}
-  {{ if eq $content.Type "reference" }}
-    <a href="#rule-{{ElementID $content.Value}}">{{ $content.Value }}</a>
-  {{ end }}
-  {{ if eq $content.Type "symbol" }}
-    <i class="ms {{ ManaClass $content.Value }}"></i>
-  {{ end }}
+    {{ if eq $content.Type "text" }}
+      {{ $content.Value }}
+    {{ end }}
+    {{ if eq $content.Type "reference" }}
+      <a href="#rule-{{ElementID $content.Value}}">{{ $content.Value }}</a>
+    {{ end }}
   {{ end }}
 {{ end }}
 
 {{ define "example" }}
-  <div class="example">
-    <span class="example-title">
-      Example
-    </span>
-    <div class="example-body">
-      {{ template "content" . }}
-    </div>
+  <div style="padding-right: 7px; margin-top: -25px; margin-bottom: -15px">[alert]<em><strong>Example:</strong>{{ template "content" . }}</em>[/alert]
   </div>
 {{ end }}
-
-<!DOCTYPE html>
-<html>
-<head>
-  <title>MTG Rules</title>
-  <link rel="icon" type="image/png" href="https://mtg-rules.com/images/favicon.png">
-  <meta http-equiv="content-type" content="text/html; charset=utf-8" http-equiv="Content-Security-Policy" content="font-src 'self' data:; img-src 'self' data:; default-src 'self' data: https://fonts.googleapis.com/ https://fonts.gstatic.com/">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Titillium+Web:ital,wght@0,200;0,300;0,400;0,600;0,700;0,900;1,200;1,300;1,400;1,600;1,700&display=swap" rel="stylesheet">
-  <style>
-{{.EmbeddedFontsCSS}}
-{{.ManaCSS}}
-  </style>
-  <style>{{.MainCSS}}</style>
-  <script>{{.MainJS}}</script>
-</head>
-<body>
-  <div>
-    <nav id="rules-nav">
-      <img src="https://mtg-rules.com/images/logo.png" alt="mtg-rules.com logo" style="height: 2em; width: auto;" style="vertical-align: middle" />
-      <span id="nav-logo" style="flex-grow: 0; vertical-align: middle;">mtg-rules.com</span>
-      <span id="rules-nav-dropdown" style="flex: 1 1 auto; flex-direction: column; margin-left: 3em;">
-        <button id="rules-dropdown-button" class="menu-button" style="height: 2em; width: 6em; margin-top: 0.4em;">Rules | ▼</button>
-        <ul id="sections-menu" class="menu">
-          {{ range $sectionNum, $sectionRule := .Rules.Sections }}
-          <li class="section-menu-item">
-            <div class="section-link" style="width: 100%;" sectionNum="{{$sectionNum}}">
-              <div style="display: flex; flex-direction: column; width: 100%;">
-                <div style="display: flex; flex-direction: row; width: 100%;">
-                  <span style="flex-grow: 1;" class="section-link-name" sectionNum="{{$sectionNum}}">{{ $sectionRule.Name }}</span>
-                  <span style="flex-grow: 0; margin-right: 1em;" sectionNum="{{$sectionNum}}" class="subsections-expand" id="subsections-expand-{{$sectionNum}}">
-                    <button class="menu-button subsections-expand-button">></button>
-                  </span>
-                </div>
-                <ul id="subsections-menu-{{$sectionNum}}" class="section-menu-item menu" style="display: none;">
-                  {{ range $subsectionNum, $subsectionRule := $sectionRule.Subsections }}
-                  <li style="height: 2em;">
-                    <span style="padding-left: 0.5em; padding-right: 0.5em; padding-top: 0.25em; padding-bottom: 0.25em; cursor: pointer;" class="subsection-link menu-item" subsection="{{$subsectionNum}}">{{$subsectionNum}}: {{ $subsectionRule.Name }}</span>
-                  </li>
-                  {{ end }}
-                </ul>
-              </div>
-            </div>
-          </li>
-          {{ end }}
-        </ul>
-      </span>
-      <span style="margin-right: 2em; margin-top: 0.25em;">
-        <input style="vertical-align: middle;" type="text" id="search-input" placeholder="Search">
-      </span>
-    </nav>
-
-    <div id="search-results" style="display: none;">
-    </div>
     
-    <h1 style="margin-top: 2em">Magic: The Gathering Rules</h1>
-    <h2>Rules</h2>
-    {{ range $sectionNum, $sectionRule := .Rules.Sections }}
-    <div class="section">
-      <h3 id="section-{{$sectionNum}}">{{$sectionNum}}: {{ $sectionRule.Name }}</h3>
-      {{ range $subsectionNum, $subsectionRule := $sectionRule.Subsections }}
-      <div class="subsection">
-        <a href="#rule-{{$subsectionNum}}">
-          <h4 id="rule-{{$subsectionNum}}">{{$subsectionNum}}: {{ $subsectionRule.Name }}</h4>
-        </a>
-        {{ range $ruleNum, $rule := $subsectionRule.Rules }}
-        <div class="rule" id="rule-{{$subsectionNum}}_{{$ruleNum}}">
-          <p class="content">
-          <a href="#rule-{{$subsectionNum}}_{{$ruleNum}}">
-            {{$subsectionNum}}.{{$ruleNum}}:
-          </a>
+{{ define "cr-download" }}
+  <div style="float: left;width: 20%;text-align: center">[alert color="grey"]<a href="http://magic.wizards.com/en/gameinfo/gameplay/formats/comprehensiverules" target="_blank" rel="noopener"><img class="wp-image-1294 size-full" src="http://blogs.magicjudges.org/rules/files/2015/10/PDFicon.png" alt="CR Download" width="100" height="100" /></a> <strong><a style="font-size: 13px" href="http://magic.wizards.com/en/gameinfo/gameplay/formats/comprehensiverules" target="_blank" rel="noopener">CR Download</a></strong>[/alert]</div>
+{{ end }}
 
-          {{ template "content" $rule.Contents }}
-
-          {{ range $exampleIndex, $example := $rule.Examples }}
-            {{ template "example" $example }}
-          {{ end }}
-          </p>
-
-          {{ range $subruleLetter, $subrule := $rule.Subrules }}
-          <div class="subrule" id="rule-{{$subsectionNum}}_{{$ruleNum}}{{$subruleLetter}}">
-            <p class="content">
-            <a href="#rule-{{$subsectionNum}}_{{$ruleNum}}{{$subruleLetter}}">
-              {{$subsectionNum}}.{{$ruleNum}}{{$subruleLetter}}: 
-            </a>
-            {{ template "content" $subrule.Contents }}
-
-            {{ range $exampleIndex, $example := $subrule.Examples }}
-              {{ template "example" $example }}
-            {{ end }}
-            </p>
-          </div>
-          {{end}}
-        </div>
-        {{end}}
-      </div>
+<div style="float: right;width: 300px;margin-right: 0px;margin-top: -20px;text-align: right"><em>Effective TODO: DATE VARIABLE</em></div>
+<h2 style="text-align: justify;margin-top: -20px">Introduction</h2>
+<p style="text-align: justify">Intro paragraph 1</p>
+{{ template "cr-download" }}
+<div style="float: right;width: 80%;margin-top: 0px;padding-left: 20px">
+<p style="text-align: justify">Intro paragraph 2</p>
+</div>
+<h2>Rules</h2>
+{{ range $sectionNum, $sectionRule := .Rules.Sections }}
+  <h3 id="section-{{$sectionNum}}">{{$sectionNum}}: {{ $sectionRule.Name }}</h3>
+  {{ range $subsectionNum, $subsectionRule := $sectionRule.Subsections }}
+    <a href="#rule-{{$subsectionNum}}"><h4 id="rule-{{$subsectionNum}}">{{$subsectionNum}}: {{ $subsectionRule.Name }}</h4></a>
+    {{ range $ruleNum, $rule := $subsectionRule.Rules }}
+      <a href="#rule-{{$subsectionNum}}-{{$ruleNum}}">{{$subsectionNum}}.{{$ruleNum}}</a>: {{ template "content" $rule.Contents }}
+      {{ range $exampleIndex, $example := $rule.Examples }}
+        {{ template "example" $example }}
       {{ end }}
-    </div>
-    {{ end}}
-  </div>
-  <div>
-    <h2>Credits</h3>
-    <p>
-      Created by <a href="https://github.com/SethCurry">Seth Curry</a>.
-    </p>
-    <h3>With Thanks To:</h3>
-    <ul>
-      <li>andrewgioia for <a href="https://github.com/andrewgioia/mana">the Mana font</a> used to display mana symbols.</li>
-      <li>Wizards of the Coast for making the game</li>
-    </ul>
-    <p>
-      Magic: The Gathering is the property of Wizards of the Coast.  This site does not own
-      these rules, and only attempts to display Wizards of the Coast's property in a way
-      that is easier for players to consume.
-    </p>
-</body>
-</html>
+      <div style="padding-left: 53px">
+      {{ range $subruleLetter, $subrule := $rule.Subrules }}
+        <a href="#rule-{{$subsectionNum}}-{{$ruleNum}}{{$subruleLetter}}">{{$subsectionNum}}.{{$ruleNum}}{{$subruleLetter}}</a>: {{ template "content" $subrule.Contents }}
+        {{ range $exampleIndex, $example := $subrule.Examples }}
+          {{ template "example" $example }}
+        {{ end }}
+      {{ end }}
+      </div>
+    {{ end }}
+  {{ end }}
+{{ end }}
