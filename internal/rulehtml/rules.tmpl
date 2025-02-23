@@ -10,43 +10,48 @@
 {{- end -}}
 
 {{- define "example" -}}
-  <div style="padding-right: 7px; margin-top: -25px; margin-bottom: -15px">[alert]<em><strong>Example:</strong> {{ template "content" . -}}</em>[/alert]
-  </div>
+  [alert]<em><strong>Example:</strong> {{ template "content" . -}}</em>[/alert]
 {{- end -}}
     
 {{- define "cr-download" -}}
   <div style="float: left;width: 20%;text-align: center">[alert color="grey"]<a href="http://magic.wizards.com/en/gameinfo/gameplay/formats/comprehensiverules" target="_blank" rel="noopener"><img class="wp-image-1294 size-full" src="http://blogs.magicjudges.org/rules/files/2015/10/PDFicon.png" alt="CR Download" width="100" height="100" /></a> <strong><a style="font-size: 13px" href="http://magic.wizards.com/en/gameinfo/gameplay/formats/comprehensiverules" target="_blank" rel="noopener">CR Download</a></strong>[/alert]</div>
 {{- end -}}
 
-<div style="float: right;width: 300px;margin-right: 0px;margin-top: -20px;text-align: right"><em>Effective TODO: DATE VARIABLE</em></div>
-<h2 style="text-align: justify;margin-top: -20px">Introduction</h2>
-<p style="text-align: justify">Intro paragraph 1</p>
-{{- template "cr-download" -}}
-<div style="float: right;width: 80%;margin-top: 0px;padding-left: 20px">
-<p style="text-align: justify">Intro paragraph 2</p>
-</div>
-<h2>Rules</h2>
-{{- range $sectionNum, $sectionRule := .Rules.Sections -}}
-  <h3 id="section-{{- $sectionNum -}}">{{- $sectionNum -}}: {{ $sectionRule.Name -}}</h3>
-  {{- range $subsectionNum, $subsectionRule := $sectionRule.Subsections -}}
-    <strong><a href="#rule-{{- $subsectionNum -}}" id="rule-{{- $subsectionNum -}}"><h4 id="rule-{{- $subsectionNum -}}">{{- $subsectionNum -}}: {{ $subsectionRule.Name -}}</h4></a></strong>
-    {{- range $ruleNum, $rule := $subsectionRule.Rules -}}
-      <strong><a href="#rule-{{- $subsectionNum -}}-{{- $ruleNum -}}" id="rule-{{- $subsectionNum -}}-{{- $ruleNum -}}">{{- $subsectionNum -}}.{{- $ruleNum -}}</a></strong>: {{ template "content" $rule.Contents }}
-      {{- range $exampleIndex, $example := $rule.Examples -}}
-        {{- template "example" $example -}}
-      {{- end -}}
-      <div style="padding-left: 53px">
-        <ul style="list-style: none;padding-left: 0">
-        {{- range $subruleLetter, $subrule := $rule.Subrules -}}
-          <li>
-            <strong><a href="#rule-{{- $subsectionNum -}}-{{- $ruleNum -}}{{- $subruleLetter -}}" id="rule-{{- $subsectionNum -}}-{{- $ruleNum -}}{{- $subruleLetter -}}">{{- $subsectionNum -}}.{{- $ruleNum -}}{{- $subruleLetter -}}</a></strong>: {{ template "content" $subrule.Contents }}
-            {{- range $exampleIndex, $example := $subrule.Examples -}}
-              {{- template "example" $example -}}
-            {{- end -}}
-          </li>
+<div class="cr-rules">
+  <div style="float: right;width: 300px;margin-right: 0px;margin-top: -20px;text-align: right"><em>Effective TODO: DATE VARIABLE</em></div>
+  <h2 style="text-align: justify;margin-top: -20px">Introduction</h2>
+  <p style="text-align: justify">Intro paragraph 1</p>
+  {{- template "cr-download" -}}
+  <div style="float: right;width: 80%;margin-top: 0px;padding-left: 20px">
+  <p style="text-align: justify">Intro paragraph 2</p>
+  </div>
+  <h2>Rules</h2>
+  {{- range $sectionNum, $sectionRule := .Rules.Sections -}}
+    <h3 id="section-{{- $sectionNum -}}">{{- $sectionNum -}}: {{ $sectionRule.Name -}}</h3>
+    {{- range $subsectionNum, $subsectionRule := $sectionRule.Subsections -}}
+      <strong><a href="#rule-{{- $subsectionNum -}}" id="rule-{{- $subsectionNum -}}"><h4 id="rule-{{- $subsectionNum -}}">{{- $subsectionNum -}}: {{ $subsectionRule.Name -}}</h4></a></strong>
+      {{- range $ruleNum, $rule := $subsectionRule.Rules -}}
+        <strong><a href="#rule-{{- $subsectionNum -}}-{{- $ruleNum -}}" id="rule-{{- $subsectionNum -}}-{{- $ruleNum -}}">{{- $subsectionNum -}}.{{- $ruleNum -}}</a></strong>: {{ template "content" $rule.Contents }}
+        {{- range $exampleIndex, $example := $rule.Examples -}}
+          {{- template "example" $example -}}
         {{- end -}}
-        </ul>
-      </div>
+        <div style="padding-left: 53px">
+          <ul style="list-style: none;padding-left: 0">
+          {{- range $subruleLetter, $subrule := $rule.Subrules -}}
+            <li>
+              <strong><a href="#rule-{{- $subsectionNum -}}-{{- $ruleNum -}}{{- $subruleLetter -}}" id="rule-{{- $subsectionNum -}}-{{- $ruleNum -}}{{- $subruleLetter -}}">{{- $subsectionNum -}}.{{- $ruleNum -}}{{- $subruleLetter -}}</a></strong>: {{ template "content" $subrule.Contents }}
+              {{- if $subrule.Examples -}}
+                <div style="padding-right: 7px; margin-top: -25px; margin-bottom: -15px">
+                  {{- range $exampleIndex, $example := $subrule.Examples -}}
+                    {{- template "example" $example -}}
+                  {{- end -}}
+                </div>
+              {{- end -}}
+            </li>
+          {{- end -}}
+          </ul>
+        </div>
+      {{- end -}}
     {{- end -}}
   {{- end -}}
-{{- end -}}
+</div>
