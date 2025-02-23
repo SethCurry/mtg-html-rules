@@ -19,9 +19,3 @@ func isExample(line string) bool {
 
 	return re.MatchString(line)
 }
-
-// <ul style="padding-left: 0">
-//     {{- range $definition := $glossaryTerm.Definition -}}
-//       <li>{{- template "content" $definition -}}</li>
-//     {{- end -}}
-//     </ul>
