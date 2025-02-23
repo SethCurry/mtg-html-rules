@@ -122,8 +122,6 @@ func (r *ruleParser) handleLine(line string, origLine string) error {
 	switch {
 	case len(line) == 0:
 		return nil
-	case strings.Contains(line, "effective as of "):
-		return r.parseEffectiveDate(line)
 	case isSection(line):
 		return r.parseSection(line)
 	case isSubsection(line):
@@ -143,11 +141,9 @@ func (r *ruleParser) handleLine(line string, origLine string) error {
 		}
 		return nil
 	default:
-		return ErrUnknownLineType
+		return errors.New("unknown line type")
 	}
 }
-
-var ErrUnknownLineType = errors.New("unknown line type")
 
 func ParseRules(cr []string) (*Rules, error) {
 	parser := newParser()
