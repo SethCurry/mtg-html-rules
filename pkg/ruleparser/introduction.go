@@ -6,30 +6,22 @@ import (
 )
 
 type Introduction struct {
-	EffectiveDate    string
-	BodyPreDownload  string
-	BodyPostDownload string
+	EffectiveDate string
+	Body          string
 }
 
 func ParseIntroduction(intro []string) (*Introduction, error) {
 	dateLineIndex := slices.IndexFunc(intro, func(s string) bool {
 		return strings.Contains(s, "effective as of")
 	})
-
 	splitDateLine := strings.Split(intro[dateLineIndex], "effective as of")
 
-	pre := slices.IndexFunc(intro[dateLineIndex:], func(s string) bool {
-		return strings.HasPrefix(s, "This ")
-	})
-
-	post := slices.IndexFunc(intro[pre:], func(s string) bool {
-		return strings.HasPrefix(s, "Changes ")
+	bodyIndex := slices.IndexFunc(intro[dateLineIndex:], func(s string) bool {
+		return strings.HasPrefix(s, "This document")
 	})
 
 	return &Introduction{
 		EffectiveDate: strings.TrimRight(strings.TrimSpace(splitDateLine[1]), "."),
-		// modify index offsets here since we searched progressively smaller slices to find them
-		BodyPreDownload:  intro[pre+dateLineIndex],
-		BodyPostDownload: intro[post+pre],
+		Body:          strings.Join(intro[bodyIndex+dateLineIndex:], "\n"),
 	}, nil
 }

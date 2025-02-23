@@ -1,8 +1,6 @@
 package ruleparser
 
 import (
-	"encoding/json"
-	"fmt"
 	"os"
 	"testing"
 )
@@ -50,10 +48,8 @@ func Test_ParseIntroduction(t *testing.T) {
 		if parsed.Introduction.EffectiveDate != testContext.want {
 			t.Fatalf("EffectiveDate did not parse correctly: wanted %s, got %s", testContext.want, parsed.Introduction.EffectiveDate)
 		}
-		intro, _ := json.Marshal(parsed.Introduction)
-		fmt.Printf("%s", intro)
-		if len(parsed.Introduction.BodyPreDownload) == 0 || len(parsed.Introduction.BodyPostDownload) == 0 {
-			t.Fatalf("Didn't parse the right number of paragraphs from the introduction")
+		if len(parsed.Introduction.Body) == 0 {
+			t.Fatalf("Introduction body was empty")
 		}
 	}
 }
