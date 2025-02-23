@@ -15,11 +15,20 @@ func ParseIntroduction(intro []string) (*Introduction, error) {
 	dateLineIndex := slices.IndexFunc(intro, func(s string) bool {
 		return strings.Contains(s, "effective as of")
 	})
+
 	splitDateLine := strings.Split(intro[dateLineIndex], "effective as of")
+
+	pre := slices.IndexFunc(intro[dateLineIndex:], func(s string) bool {
+		return strings.HasPrefix(s, "This ")
+	})
+
+	post := slices.IndexFunc(intro[pre:], func(s string) bool {
+		return strings.HasPrefix(s, "Changes ")
+	})
 
 	return &Introduction{
 		EffectiveDate:    strings.TrimRight(strings.TrimSpace(splitDateLine[1]), "."),
-		BodyPreDownload:  intro[3],
-		BodyPostDownload: intro[4],
+		BodyPreDownload:  intro[pre],
+		BodyPostDownload: intro[post],
 	}, nil
 }

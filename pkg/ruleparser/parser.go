@@ -3,6 +3,7 @@ package ruleparser
 import (
 	"fmt"
 	"io"
+	"os"
 	"slices"
 )
 
@@ -44,6 +45,15 @@ func DispatchDocument(doc *ParsedDocument, reader io.Reader) error {
 		return err
 	}
 	return nil
+}
+
+func ParseFile(path string) (*ParsedDocument, error) {
+	fileDescriptor, err := os.Open(path)
+	if err != nil {
+		return nil, fmt.Errorf("failed to open rules file: %w", err)
+	}
+	defer fileDescriptor.Close()
+	return ParseCrDoc(fileDescriptor)
 }
 
 func ParseCrDoc(reader io.Reader) (*ParsedDocument, error) {

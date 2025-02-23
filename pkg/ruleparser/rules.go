@@ -18,8 +18,6 @@ type Rules struct {
 
 func newParser() *ruleParser {
 	return &ruleParser{
-		inRules:           false,
-		inGlossary:        false,
 		currentSection:    nil,
 		currentSubsection: nil,
 		currentRule:       nil,
@@ -29,15 +27,6 @@ func newParser() *ruleParser {
 }
 
 type ruleParser struct {
-	effectiveDate string
-	// inRules tracks the state of whether the reader is current returning rules
-	// as opposed to the foreword/licensing/etc that come before the actual rules.
-	inRules bool
-
-	// inGlossary tracks the state of whether the reader is currently returning the glossary.
-	// Used to ignore content in the glossary.
-	inGlossary bool
-
 	// currentSection stores a pointer to the last section header that was parsed.
 	// This allows subsections and rules to be added to them as that section is being parsed.
 	currentSection *Section
@@ -110,12 +99,6 @@ func (r *ruleParser) parseExample(line string) {
 	example := parseExample(line)
 
 	r.lastExampler.AddExample(example)
-}
-
-func (r *ruleParser) parseEffectiveDate(line string) error {
-	splitLine := strings.Split(line, "as of")
-	r.effectiveDate = splitLine[1]
-	return nil
 }
 
 func (r *ruleParser) handleLine(line string, origLine string) error {
