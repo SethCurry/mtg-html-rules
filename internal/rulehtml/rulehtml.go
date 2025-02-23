@@ -14,10 +14,13 @@ func getElementID(elementName string) (string, error) {
 }
 
 type templateData struct {
-	Rules 	*ruleparser.Rules
+	Introduction *ruleparser.Introduction
+	Rules        *ruleparser.Rules
+	Glossary     []*ruleparser.GlossaryEntry
+	Credits      []string
 }
 
-func GenerateTemplate(parsedRules *ruleparser.Rules, toWriter io.Writer) error {
+func GenerateTemplate(parsedDoc *ruleparser.ParsedDocument, toWriter io.Writer) error {
 	parsedTemplate, err := template.New("rules.tmpl").Funcs(template.FuncMap{
 		"ElementID": getElementID,
 	}).Parse(rootTemplate)
@@ -26,7 +29,10 @@ func GenerateTemplate(parsedRules *ruleparser.Rules, toWriter io.Writer) error {
 	}
 
 	data := templateData{
-		Rules:	parsedRules,
+		Introduction: parsedDoc.Introduction,
+		Rules:        parsedDoc.Rules,
+		Glossary:     parsedDoc.Glossary,
+		Credits:      parsedDoc.Credits,
 	}
 
 	err = parsedTemplate.Execute(toWriter, &data)

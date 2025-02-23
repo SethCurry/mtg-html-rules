@@ -18,12 +18,12 @@
 {{- end -}}
 
 <div class="cr-rules">
-  <div style="float: right;width: 300px;margin-right: 0px;margin-top: -20px;text-align: right"><em>Effective TODO: DATE VARIABLE</em></div>
+  <div style="float: right;width: 300px;margin-right: 0px;margin-top: -20px;text-align: right"><em>Effective {{ .Introduction.EffectiveDate }}</em></div>
   <h2 style="text-align: justify;margin-top: -20px">Introduction</h2>
-  <p style="text-align: justify">Intro paragraph 1</p>
+  <p style="text-align: justify">{{- .Introduction.BodyPreDownload -}}</p>
   {{- template "cr-download" -}}
   <div style="float: right;width: 80%;margin-top: 0px;padding-left: 20px">
-  <p style="text-align: justify">Intro paragraph 2</p>
+  <p style="text-align: justify">{{- .Introduction.BodyPostDownload -}}</p>
   </div>
   <h2>Rules</h2>
   {{- range $sectionNum, $sectionRule := .Rules.Sections -}}
@@ -54,4 +54,17 @@
       {{- end -}}
     {{- end -}}
   {{- end -}}
+  <h2>Glossary</h2>
+  {{- range $glossaryTerm := .Glossary -}}
+    <strong>{{- template "content" $glossaryTerm.Term -}}</strong>
+    <ul style="padding-left: 0">
+    {{- range $definition := $glossaryTerm.Definition -}}
+      <li>{{- template "content" $definition -}}</li>
+    {{- end -}}
+    </ul>
+  {{- end -}}
+  <h2>Credits</h2>
+  {{ range $creditLine := .Credits }}
+    {{ $creditLine }}
+  {{ end }}
 </div>

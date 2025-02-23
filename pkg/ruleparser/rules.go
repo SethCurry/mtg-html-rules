@@ -1,40 +1,177 @@
 package ruleparser
 
 import (
-	"bytes"
+	"encoding/json"
+	"errors"
+	"strings"
 )
 
 func NewRules() *Rules {
 	return &Rules{
 		Sections: make(map[int]*Section),
-		Glossary: make(map[string]string),
 	}
 }
 
 type Rules struct {
-	Sections map[int]*Section  `json:"sections"`
-	Glossary map[string]string `json:"glossary"`
+	Sections map[int]*Section `json:"sections"`
 }
 
-func scanLines(data []byte, atEOF bool) (int, []byte, error) {
-	if atEOF && len(data) == 0 {
-		return 0, nil, nil
+func newParser() *ruleParser {
+	return &ruleParser{
+		inRules:           false,
+		inGlossary:        false,
+		currentSection:    nil,
+		currentSubsection: nil,
+		currentRule:       nil,
+		lastExampler:      nil,
+		rules:             NewRules(),
+	}
+}
+
+type ruleParser struct {
+	effectiveDate string
+	// inRules tracks the state of whether the reader is current returning rules
+	// as opposed to the foreword/licensing/etc that come before the actual rules.
+	inRules bool
+
+	// inGlossary tracks the state of whether the reader is currently returning the glossary.
+	// Used to ignore content in the glossary.
+	inGlossary bool
+
+	// currentSection stores a pointer to the last section header that was parsed.
+	// This allows subsections and rules to be added to them as that section is being parsed.
+	currentSection *Section
+
+	// currentSubsection stores a pointer to the last subsection header that was parsed.
+	// This allows rules to be added to it as that subsection is being parsed.
+	currentSubsection *Subsection
+
+	// currentRule stores a pointer to the last rule header that was parsed.
+	// This allows subrules to be added to it as that rule is being parsed.
+	currentRule *Rule
+
+	// lastExampler stores a pointer to the last rule or subrule that was parsed.
+	// This allows examples to be added to it as that rule or subrule is being parsed.
+	lastExampler Exampler
+
+	rules *Rules
+}
+
+func (r *ruleParser) parseSubsection(line string) error {
+	num, subsect, err := parseSubsectionLine(line)
+	if err != nil {
+		return err
 	}
 
-	if i := bytes.IndexByte(data, '\r'); i >= 0 {
-		// We have a full newline-terminated line.
-		return i + 1, data[0:i], nil
+	r.currentSubsection = subsect
+	r.currentSection.Subsections[num] = subsect
+
+	return nil
+}
+
+func (r *ruleParser) parseSection(line string) error {
+	num, sect, err := parseSectionLine(line)
+	if err != nil {
+		return err
 	}
 
-	if i := bytes.IndexByte(data, '\n'); i >= 0 {
-		// We have a full newline-terminated line.
-		return i + 1, data[0:i], nil
+	r.currentSection = sect
+	r.rules.Sections[num] = sect
+
+	return nil
+}
+
+func (r *ruleParser) parseRule(line string) error {
+	num, gotRule, err := parseRuleLine(line)
+	if err != nil {
+		return err
 	}
 
-	// If we're at EOF, we have a final, non-terminated line. Return it.
-	if atEOF {
-		return len(data), data, nil
+	r.currentRule = gotRule
+	r.currentSubsection.Rules[num] = gotRule
+	r.lastExampler = gotRule
+
+	return nil
+}
+
+func (r *ruleParser) parseSubrule(line string) error {
+	l, subrule, err := parseSubruleLine(line)
+	if err != nil {
+		return err
 	}
-	// Request more data.
-	return 0, nil, nil
+
+	r.currentRule.Subrules[l] = subrule
+	r.lastExampler = subrule
+
+	return nil
+}
+
+func (r *ruleParser) parseExample(line string) {
+	example := parseExample(line)
+
+	r.lastExampler.AddExample(example)
+}
+
+func (r *ruleParser) parseEffectiveDate(line string) error {
+	splitLine := strings.Split(line, "as of")
+	r.effectiveDate = splitLine[1]
+	return nil
+}
+
+func (r *ruleParser) handleLine(line string, origLine string) error {
+	switch {
+	case len(line) == 0:
+		return nil
+	case strings.Contains(line, "effective as of "):
+		return r.parseEffectiveDate(line)
+	case isSection(line):
+		return r.parseSection(line)
+	case isSubsection(line):
+		return r.parseSubsection(line)
+	case isRule(line):
+		return r.parseRule(line)
+	case isSubrule(line):
+		return r.parseSubrule(line)
+	case isExample(line):
+		r.parseExample(line)
+		return nil
+	case strings.HasPrefix(origLine, "    ") || strings.HasPrefix(origLine, "\n"):
+		if r.lastExampler != nil {
+			r.lastExampler.AddToContents(line)
+		} else {
+			return errors.New("unexpected content line")
+		}
+		return nil
+	default:
+		return ErrUnknownLineType
+	}
+}
+
+var ErrUnknownLineType = errors.New("unknown line type")
+
+func ParseRules(cr []string) (*Rules, error) {
+	parser := newParser()
+	lineNumber := 0
+	for i := 0; i < len(cr); i++ {
+		origLine := convertEncoding(cr[i])
+		line := strings.TrimSpace(origLine)
+		origLine = strings.Trim(origLine, "\n")
+		err := parser.handleLine(line, origLine)
+		if err != nil {
+			origLineJSON, jsonErr := json.Marshal(origLine)
+			if jsonErr != nil {
+				return nil, &ParseError{
+					Line:       origLine,
+					LineNumber: lineNumber,
+					Err:        err,
+				}
+			}
+			return nil, &ParseError{
+				Line:       string(origLineJSON),
+				LineNumber: lineNumber,
+				Err:        err,
+			}
+		}
+	}
+	return parser.rules, nil
 }

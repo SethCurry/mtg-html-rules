@@ -16,7 +16,6 @@ func usage() {
 
 func main() {
 	outputFilePath := flag.String("output", "./mtgcr.html", "The path to write the HTML rules file to.")
-	rulesFilePath := flag.String("rules", "", "The path to the rules file to parse.")
 	isHelp := flag.Bool("help", false, "Print the help text and exit.")
 
 	flag.Parse()
@@ -26,37 +25,27 @@ func main() {
 		os.Exit(0)
 	}
 
-	var parsedRules *ruleparser.Rules
+	var parsedRules *ruleparser.ParsedDocument
 
-	if *rulesFilePath == "" {
-		rulesURL, err := ruleparser.GetLatestRulesTxtURL()
-		if err != nil {
-			fmt.Printf("no rules file provided with --rules flag, and failed to find the URL for the latest rules:\n%s\n", err.Error())
-			os.Exit(1)
-		}
+	rulesURL, err := ruleparser.GetLatestRulesTxtURL()
+	if err != nil {
+		fmt.Printf("no rules file provided with --rules flag, and failed to find the URL for the latest rules:\n%s\n", err.Error())
+		os.Exit(1)
+	}
 
-		fmt.Printf("Downloading rules from %q\n", rulesURL)
+	fmt.Printf("Downloading rules from %q\n", rulesURL)
 
-		resp, err := http.Get(rulesURL)
-		if err != nil {
-			fmt.Printf("failed to download rules from %q:\n%s\n", rulesURL, err.Error())
-			os.Exit(1)
-		}
-		defer resp.Body.Close()
+	resp, err := http.Get(rulesURL)
+	if err != nil {
+		fmt.Printf("failed to download rules from %q:\n%s\n", rulesURL, err.Error())
+		os.Exit(1)
+	}
+	defer resp.Body.Close()
 
-		parsedRules, err = ruleparser.ParseRules(resp.Body)
-		if err != nil {
-			fmt.Printf("failed to parse rules from %q:\n%s\n", rulesURL, err.Error())
-			os.Exit(1)
-		}
-	} else {
-		var err error
-
-		parsedRules, err = ruleparser.ParseFile(*rulesFilePath)
-		if err != nil {
-			fmt.Printf("failed to parse rules from file %q:\n%s\n", *rulesFilePath, err.Error())
-			os.Exit(1)
-		}
+	parsedRules, err = ruleparser.ParseCrDoc(resp.Body)
+	if err != nil {
+		fmt.Printf("failed to parse rules from %q:\n%s\n", rulesURL, err.Error())
+		os.Exit(1)
 	}
 
 	outFd, err := os.Create(*outputFilePath)
