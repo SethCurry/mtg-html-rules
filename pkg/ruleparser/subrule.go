@@ -28,7 +28,7 @@ func (s *Subrule) AddToContents(text string) {
 }
 
 func isSubrule(line string) bool {
-	re := regexp.MustCompile(`^[0-9]{3}\.[0-9]+[a-z]\.? .*`)
+	re := regexp.MustCompile(`^[0-9]{3}\.[0-9]+[a-z]+\.? .*`)
 
 	return re.MatchString(line)
 }

@@ -28,7 +28,7 @@ type ContentElement struct {
 
 //nolint:funlen
 func parseContent(content string) []*ContentElement {
-	refRegex := regexp.MustCompile(`[0-9]{3}\.[0-9]+[a-z]?`)
+	refRegex := regexp.MustCompile(`[0-9]{3}\.[0-9]+[a-z]+?`)
 	elements := []*ContentElement{}
 	acc := ""
 
@@ -41,23 +41,6 @@ func parseContent(content string) []*ContentElement {
 		}
 
 		switch character {
-		case '{':
-			if len(acc) > 0 {
-				elements = append(elements, &ContentElement{
-					Type:  ContentText,
-					Value: acc,
-				})
-				acc = ""
-			}
-
-			value := scanner.ReadUntil([]rune{'}'})
-
-			elements = append(elements, &ContentElement{
-				Type:  ContentSymbol,
-				Value: value,
-			})
-
-			scanner.Next()
 		case '0', '1', '2', '3', '4', '5', '6', '7', '8', '9':
 			maybeRef := string(character) + scanner.ReadUntil([]rune{' ', ')', ',', '-'})
 			maybeRef = strings.TrimSuffix(maybeRef, ".")
