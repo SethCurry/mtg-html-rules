@@ -1,7 +1,6 @@
 package ruleparser
 
 import (
-	"fmt"
 	"regexp"
 )
 
@@ -37,8 +36,6 @@ func parseContent(content string) []*ContentElement {
 
 	lastIndex := 0
 	for i := range refIndices {
-		fmt.Printf("%s\n", content)
-		fmt.Printf("\t%v\n", refIndices[i])
 		// Section reference
 		if refIndices[i][2] != -1 {
 			elements = append(elements, &ContentElement{

@@ -11,7 +11,7 @@
     {{- if eq $content.Type "sectionReference" -}}
       {{- $ruleRef := Split $content.Value "," -}}
       {{- $section := index $ruleRef 0 -}}
-      {{- $sectionTag := Replace $section " " "-" -1 }}
+      {{- $sectionTag := Replace $section " " "-" -1 -}}
       <a href="#{{- ElementID $sectionTag -}}">{{- $content.Value -}}</a>
     {{- end -}}
   {{- end -}}
