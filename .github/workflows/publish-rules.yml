@@ -1,6 +1,8 @@
 name: Publish HTML Page
 on:
   push:
+    branches:
+      - main
 
 permissions:
   pages: write
