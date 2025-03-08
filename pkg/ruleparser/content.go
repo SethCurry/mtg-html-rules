@@ -1,8 +1,8 @@
 package ruleparser
 
 import (
+	"fmt"
 	"regexp"
-	"strings"
 )
 
 // ContentType represents the type of content in a rule, such as text,
@@ -17,8 +17,11 @@ const (
 	// such as a mana symbol or the tap symbol.
 	ContentSymbol ContentType = "symbol"
 
-	// ContentReference represents a reference to another rule.
-	ContentReference ContentType = "reference"
+	// ContentRuleReference represents a reference to another rule.
+	ContentRuleReference ContentType = "ruleReference"
+
+	// ContentSectionReference represents a reference to a full section.
+	ContentSectionReference ContentType = "sectionReference"
 )
 
 type ContentElement struct {
@@ -26,64 +29,50 @@ type ContentElement struct {
 	Value string      `json:"value"`
 }
 
-//nolint:funlen
 func parseContent(content string) []*ContentElement {
-	refRegex := regexp.MustCompile(`[0-9]{3}\.[0-9]+[a-z]+?`)
+	// https://regex101.com/r/rNco94/7
+	refRegex := regexp.MustCompile(`(section \d, “.+”)|(\d{3}(?:\.\d{1,3}[a-z]?)?)(?:–[a-z])?`)
 	elements := []*ContentElement{}
-	acc := ""
+	refIndices := refRegex.FindAllStringSubmatchIndex(content, -1)
 
-	scanner := NewStringScanner(content)
+	lastIndex := 0
+	for i := range refIndices {
+		fmt.Printf("%s\n", content)
+		fmt.Printf("\t%v\n", refIndices[i])
+		// Section reference
+		if refIndices[i][2] != -1 {
+			elements = append(elements, &ContentElement{
+				Type:  ContentText,
+				Value: content[lastIndex:refIndices[i][2]],
+			})
 
-	for {
-		character, ok := scanner.Next()
-		if !ok {
-			break
-		}
+			elements = append(elements, &ContentElement{
+				Type:  ContentSectionReference,
+				Value: content[refIndices[i][2]:refIndices[i][3]],
+			})
 
-		switch character {
-		case '0', '1', '2', '3', '4', '5', '6', '7', '8', '9':
-			maybeRef := string(character) + scanner.ReadUntil([]rune{' ', ')', ',', '-'})
-			maybeRef = strings.TrimSuffix(maybeRef, ".")
+			lastIndex = refIndices[i][3]
+			// Rule reference
+		} else {
+			elements = append(elements, &ContentElement{
+				Type:  ContentText,
+				Value: content[lastIndex:refIndices[i][0]],
+			})
 
-			lastElEndsInSeeRule := strings.HasSuffix(acc, "ee rule ")
+			elements = append(elements, &ContentElement{
+				Type:  ContentRuleReference,
+				Value: content[refIndices[i][0]:refIndices[i][1]],
+			})
 
-			if refRegex.MatchString(maybeRef) || lastElEndsInSeeRule {
-				if len(acc) > 0 {
-					elements = append(elements, &ContentElement{
-						Type:  ContentText,
-						Value: acc,
-					})
-					acc = ""
-				}
-
-				elements = append(elements, &ContentElement{
-					Type:  ContentReference,
-					Value: maybeRef,
-				})
-			} else {
-				acc += maybeRef
-			}
-		default:
-			acc += string(character)
+			lastIndex = refIndices[i][1]
 		}
 	}
 
-	if len(acc) > 0 {
+	if len(content[lastIndex:]) > 0 {
 		elements = append(elements, &ContentElement{
 			Type:  ContentText,
-			Value: acc,
+			Value: content[lastIndex:],
 		})
 	}
-
 	return elements
-}
-
-func convertEncoding(old string) string {
-	old = strings.Replace(old, "“", "\"", -1)
-	old = strings.Replace(old, "”", "\"", -1)
-	old = strings.Replace(old, "’", "'", -1)
-	old = strings.Replace(old, "™", "(tm)", -1)
-	old = strings.Replace(old, "–", "-", -1)
-
-	return old
 }

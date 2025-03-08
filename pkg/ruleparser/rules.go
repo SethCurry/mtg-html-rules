@@ -131,10 +131,9 @@ func (r *ruleParser) handleLine(line string, origLine string) error {
 func ParseRules(cr []string) (*Rules, error) {
 	parser := newParser()
 	lineNumber := 0
-	for i := 0; i < len(cr); i++ {
-		origLine := convertEncoding(cr[i])
-		line := strings.TrimSpace(origLine)
-		origLine = strings.Trim(origLine, "\n")
+	for i := range cr {
+		line := strings.TrimSpace(cr[i])
+		origLine := strings.Trim(cr[i], "\n")
 		err := parser.handleLine(line, origLine)
 		if err != nil {
 			origLineJSON, jsonErr := json.Marshal(origLine)
