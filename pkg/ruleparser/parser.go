@@ -58,7 +58,10 @@ func ParseFile(path string) (*ParsedDocument, error) {
 
 func ParseCrDoc(reader io.Reader) (*ParsedDocument, error) {
 	doc := &ParsedDocument{}
-	DispatchDocument(doc, reader)
+	err := DispatchDocument(doc, reader)
+	if err != nil {
+		panic(err)
+	}
 	return doc, nil
 }
 
