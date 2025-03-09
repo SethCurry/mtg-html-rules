@@ -2,6 +2,7 @@ package ruleparser
 
 import (
 	"regexp"
+	"strings"
 )
 
 // ContentType represents the type of content in a rule, such as text,
@@ -21,6 +22,9 @@ const (
 
 	// ContentSectionReference represents a reference to a full section.
 	ContentSectionReference ContentType = "sectionReference"
+
+	// ContentUrlReference represents a reference to a full section.
+	ContentUrlReference ContentType = "urlReference"
 )
 
 type ContentElement struct {
@@ -29,26 +33,26 @@ type ContentElement struct {
 }
 
 func parseContent(content string) []*ContentElement {
-	// https://regex101.com/r/rNco94/7
-	refRegex := regexp.MustCompile(`(section \d, “.+”)|(\d{3}(?:\.\d{1,3}[a-z]?)?)(?:–[a-z])?`)
+	// https://regex101.com/r/rNco94/9
+	refRegex := regexp.MustCompile(`([a-zA-Z0-9/.-]+(?:\.com|\.net)[a-zA-Z0-9/-]*)|(section \d, “.+”)|(\d{3}(?:\.\d{1,3}[a-z]?)?)(?:–[a-z])?`)
 	elements := []*ContentElement{}
 	refIndices := refRegex.FindAllStringSubmatchIndex(content, -1)
 
 	lastIndex := 0
 	for i := range refIndices {
 		// Section reference
-		if refIndices[i][2] != -1 {
+		if refIndices[i][4] != -1 {
 			elements = append(elements, &ContentElement{
 				Type:  ContentText,
-				Value: content[lastIndex:refIndices[i][2]],
+				Value: content[lastIndex:refIndices[i][4]],
 			})
 
 			elements = append(elements, &ContentElement{
 				Type:  ContentSectionReference,
-				Value: content[refIndices[i][2]:refIndices[i][3]],
+				Value: content[refIndices[i][4]:refIndices[i][5]],
 			})
 
-			lastIndex = refIndices[i][3]
+			lastIndex = refIndices[i][5]
 			// Rule reference
 		} else {
 			elements = append(elements, &ContentElement{
@@ -56,8 +60,14 @@ func parseContent(content string) []*ContentElement {
 				Value: content[lastIndex:refIndices[i][0]],
 			})
 
+			parsedReference := content[refIndices[i][0]:refIndices[i][1]]
+			contentType := ContentRuleReference
+			if strings.Contains(parsedReference, ".com") || strings.Contains(parsedReference, ".net") {
+				contentType = ContentUrlReference
+			}
+
 			elements = append(elements, &ContentElement{
-				Type:  ContentRuleReference,
+				Type:  contentType,
 				Value: content[refIndices[i][0]:refIndices[i][1]],
 			})
 

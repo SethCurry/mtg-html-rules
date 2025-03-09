@@ -14,6 +14,9 @@
       {{- $sectionTag := Replace $section " " "-" -1 -}}
       <a href="#{{- ElementID $sectionTag -}}">{{- $content.Value -}}</a>
     {{- end -}}
+    {{- if eq $content.Type "urlReference" -}}
+      <a href="https://{{- $content.Value -}}" target="_blank">{{- $content.Value -}}</a>
+    {{- end -}}
   {{- end -}}
 {{- end -}}
 
