@@ -44,7 +44,7 @@
           {{- template "example" $example -}}
         {{- end -}}
         <div style="padding-left: 53px">
-          <ul style="list-style: none;padding-left: 0">
+          <ul style="list-style: none;padding-left: 0;list-style-type: none;">
           {{- range $subruleLetter, $subrule := $rule.Subrules -}}
             <li>
               <strong><span id="rule-{{- $subsectionNum -}}-{{- $ruleNum -}}{{- $subruleLetter -}}">{{- $subsectionNum -}}.{{- $ruleNum -}}{{- $subruleLetter -}}</span></strong> {{ template "content" $subrule.Contents }}
@@ -64,13 +64,11 @@
   {{- end -}}
   <h2>Glossary</h2>
   {{- range $glossaryTerm := .Glossary -}}
-    <strong>{{- template "content" $glossaryTerm.Term -}}</strong>
-    <ul style="padding-left: 0">
-    {{- range $definition := $glossaryTerm.Definition -}}
-      <li>{{- template "content" $definition -}}</li>
-    {{- end -}}
-    </ul>
-  {{- end -}}
+    <p style="text-align: justify"><strong>{{ template "content" $glossaryTerm.Term }}</strong>
+    {{ range $definition := $glossaryTerm.Definition }}
+      {{- template "content" $definition }}
+    {{ end }}
+  {{- end -}}</p>
   <h2>Credits</h2>
   {{ range $creditLine := .Credits }}
     {{ $creditLine }}
