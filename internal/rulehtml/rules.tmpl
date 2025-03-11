@@ -14,6 +14,11 @@
       {{- $sectionTag := Replace $section " " "-" -1 -}}
       <a href="#{{- ElementID $sectionTag -}}">{{- $content.Value -}}</a>
     {{- end -}}
+    {{- if eq $content.Type "glossaryReference" -}}
+      {{- $glossaryTag := Replace $content.Value " " "-" -1 -}}
+      {{- $glossaryTag = Replace $glossaryTag "," "" -1 -}}
+      <a href="#{{- $glossaryTag -}}">{{- $content.Value -}}</a>
+    {{- end -}}
     {{- if eq $content.Type "urlReference" -}}
       <a href="https://{{- $content.Value -}}" target="_blank">{{- $content.Value -}}</a>
     {{- end -}}
@@ -64,7 +69,9 @@
   {{- end -}}
   <h2>Glossary</h2>
   {{- range $glossaryTerm := .Glossary -}}
-    <p style="text-align: justify"><strong>{{ template "content" $glossaryTerm.Term }}</strong>
+    {{- $glossaryTag := Replace $glossaryTerm.Term " " "-" -1 -}}
+    {{- $glossaryTag = Replace $glossaryTag "," "" -1 -}}
+    <p style="text-align: justify" id="{{- $glossaryTag -}}"><strong>{{ $glossaryTerm.Term }}</strong>
     {{ range $definition := $glossaryTerm.Definition }}
       {{- template "content" $definition }}
     {{ end }}

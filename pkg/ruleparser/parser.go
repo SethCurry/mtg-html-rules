@@ -38,6 +38,7 @@ func DispatchDocument(doc *ParsedDocument, reader io.Reader) error {
 	doc.Credits = credits
 
 	glossaryEntries, lastGlossaryHit := ParseGlossary(cr[:lastCreditsHit])
+	LinkGlossaryReferences(glossaryEntries)
 	doc.Glossary = glossaryEntries
 
 	doc.Rules, err = ParseRules(cr[firstCreditsHit+1 : lastGlossaryHit])

@@ -25,6 +25,9 @@ const (
 
 	// ContentUrlReference represents a reference to a full section.
 	ContentUrlReference ContentType = "urlReference"
+
+	// ContentUrlReference represents a reference to a glossary entry.
+	ContentGlossaryReference ContentType = "glossaryReference"
 )
 
 type ContentElement struct {

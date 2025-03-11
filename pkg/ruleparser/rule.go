@@ -57,6 +57,8 @@ func parseRuleLine(line string) (int, *Rule, error) {
 		return 0, nil, ErrInvalidRuleLine
 	}
 
+	// TODO: I emailed Del to see about getting a space properly added here
+	// so maybe we can simplify this in the future
 	if parts[0] == "901.4.All" {
 		return 4, NewRule(parseContent(line[6:])), nil
 	}
