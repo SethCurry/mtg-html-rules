@@ -46,11 +46,10 @@ func LinkGlossaryReferences(entries []*GlossaryEntry) {
 	for _, currentTerm := range entries {
 		for j := range currentTerm.Definition {
 			updatedDefinitionContent := []*ContentElement{}
-			for k := range currentTerm.Definition[j] {
-				currentDefElement := currentTerm.Definition[j][k]
-				currentDefSlice := currentTerm.Definition[j][k].Value
+			for _, element := range currentTerm.Definition[j] {
+				currentDefSlice := element.Value
 
-				if currentTerm.Definition[j][k].Type == ContentText {
+				if element.Type == ContentText {
 					refIndices := refRegex.FindAllStringSubmatchIndex(currentDefSlice, -1)
 
 					if len(refIndices) > 0 {
@@ -90,10 +89,10 @@ func LinkGlossaryReferences(entries []*GlossaryEntry) {
 							Value: currentDefSlice[refIndices[0][3]:],
 						})
 					} else {
-						updatedDefinitionContent = append(updatedDefinitionContent, currentDefElement)
+						updatedDefinitionContent = append(updatedDefinitionContent, element)
 					}
 				} else {
-					updatedDefinitionContent = append(updatedDefinitionContent, currentDefElement)
+					updatedDefinitionContent = append(updatedDefinitionContent, element)
 				}
 			}
 			currentTerm.Definition[j] = updatedDefinitionContent
