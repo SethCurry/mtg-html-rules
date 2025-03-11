@@ -71,7 +71,7 @@ func LinkGlossaryReferences(entries []*GlossaryEntry) {
 							index := strings.Index(str, ref)
 							subStringIndices = append(subStringIndices, []int{index, index + len(ref)})
 						}
-						for idx, _ := range subStringIndices {
+						for idx := range subStringIndices {
 							updatedDefinitionContent = append(updatedDefinitionContent, &ContentElement{
 								Type:  ContentGlossaryReference,
 								Value: strings.TrimSpace(references[idx]),
