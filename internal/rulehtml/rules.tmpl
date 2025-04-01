@@ -51,7 +51,7 @@
         <div style="padding-left: 53px">
           <ul style="list-style: none;padding-left: 0;list-style-type: none;">
           {{- range $subruleLetter, $subrule := $rule.Subrules -}}
-            <li>
+            <li style="padding-bottom: 1em;">
               <strong><span id="rule-{{- $subsectionNum -}}-{{- $ruleNum -}}{{- $subruleLetter -}}">{{- $subsectionNum -}}.{{- $ruleNum -}}{{- $subruleLetter -}}</span></strong> {{ template "content" $subrule.Contents }}
               {{- if $subrule.Examples -}}
                 <div style="padding-right: 7px; margin-top: -25px; margin-bottom: -15px">
