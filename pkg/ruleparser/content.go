@@ -36,8 +36,8 @@ type ContentElement struct {
 }
 
 func parseContent(content string) []*ContentElement {
-	// https://regex101.com/r/rNco94/9
-	refRegex := regexp.MustCompile(`([a-zA-Z0-9/.-]+(?:\.com|\.net)[a-zA-Z0-9/-]*)|(section \d, “.+”)|(\d{3}(?:\.\d{1,3}[a-z]?)?)(?:–[a-z])?`)
+	// https://regex101.com/r/rNco94/10
+	refRegex := regexp.MustCompile(`([a-zA-Z0-9/.-]+(?:\.com|\.net)[a-zA-Z0-9/-]*)|(section \d, “.+”)|\b(\d{3}(?:\.\d{1,3}[a-z]?)?)(?:–[a-z])?\b`)
 	elements := []*ContentElement{}
 	refIndices := refRegex.FindAllStringSubmatchIndex(content, -1)
 
